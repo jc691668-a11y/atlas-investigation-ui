@@ -1,0 +1,100 @@
+{
+  "baseline_version": "v0.1.0",
+  "source_type": "committed_frozen_baseline_artifacts",
+  "source_directory": "docs/canary/demo/case1_lidar",
+  "source_commit": "2395d0b34be7cd1cb51690387a1a44508cfb58d2",
+  "realtime": false,
+  "rerun_in_this_task": false,
+  "artifact_count": 14,
+  "source_artifacts": [
+    {
+      "path": "docs/canary/demo/case1_lidar/AGENT-OBS-LIDAR-001.json",
+      "sha256": "d9281d95799057dbbb809808ceadab61730bd6ae9f2b4e9415601d964bb98446"
+    },
+    {
+      "path": "docs/canary/demo/case1_lidar/CLOSE-PUDU-LIDAR-001.json",
+      "sha256": "0e9d32e40b6f06485f8ca1eb2bc85a8f16952864fa4434b95aea5c6ba2f0b250"
+    },
+    {
+      "path": "docs/canary/demo/case1_lidar/EGP-LIDAR-001.json",
+      "sha256": "027fa38af047b17e305921dbc34a25077d4a9fef5b4dd5575fd3311c24f0aa7c"
+    },
+    {
+      "path": "docs/canary/demo/case1_lidar/EP-PUDU-LIDAR-001.json",
+      "sha256": "dd117d553ca954ca8b73df19b6031a3f5fbb01475be7564b26dc6cb35400fc23"
+    },
+    {
+      "path": "docs/canary/demo/case1_lidar/IR-OEM-LIDAR-001.json",
+      "sha256": "b3f71c4beaea6f8570a3762364e61e9c0d0017e2d0518e5eeee1cc0428c9cc72"
+    },
+    {
+      "path": "docs/canary/demo/case1_lidar/LL-OEM-LIDAR-001.json",
+      "sha256": "584a89e1d9a22dacdad3ad236adf840dc2d48b837b8cfaff9c6fb7b998f82af4"
+    },
+    {
+      "path": "docs/canary/demo/case1_lidar/MATCH-OEM-LIDAR-001.json",
+      "sha256": "6d77c10230882e6d84d253fc787ce3b2a262542662b9bcf557ed8b4318725283"
+    },
+    {
+      "path": "docs/canary/demo/case1_lidar/REF-PUDU-LIDAR-001.json",
+      "sha256": "2a2799924ddb68cbe5157daaa86ef3990291f4ee3d2f30dcb9531819de39d1ac"
+    },
+    {
+      "path": "docs/canary/demo/case1_lidar/SCLOSE-LIDAR-001.json",
+      "sha256": "da4c5652eb180b07e012e5be000f955e9c1b4db56a569fff43809d970c3101b9"
+    },
+    {
+      "path": "docs/canary/demo/case1_lidar/SEP-LIDAR-001.json",
+      "sha256": "79fe8ebd45b8aa53b13b8e1c9a3b0cdb604fdd1c676a969c0c4c769016e5d8b1"
+    },
+    {
+      "path": "docs/canary/demo/case1_lidar/SIR-LIDAR-001.json",
+      "sha256": "9cd91a9904cb427bdcc3e97d742764b635a389da6690eab29d14a5de31d53ca3"
+    },
+    {
+      "path": "docs/canary/demo/case1_lidar/SLL-LIDAR-001.json",
+      "sha256": "adfe42fda41fe67a15b9ba6c045172b4b93d2d9e74c1e5fb7a4cf1c6c0f690d3"
+    },
+    {
+      "path": "docs/canary/demo/case1_lidar/SMATCH-LIDAR-001.json",
+      "sha256": "73eb75e6f298239cabaa7284947a52bbacb021116afabe5e9edce25a823ad09c"
+    },
+    {
+      "path": "docs/canary/demo/case1_lidar/SREF-HESAI-LIDAR-001.json",
+      "sha256": "609d0636c1e02a93ac3fe8e500f90815e26f216d70e475c07c4343f23b85a431"
+    }
+  ],
+  "ui_snapshot": {
+    "path": "exports/ui_demo/lidar_case1_frozen_v0.1.0/ui_snapshot.json",
+    "sha256": "fe2c4cdd21262a6b365453683fc60c9a04cd6dc41c9eaf20e81c782468aeec24"
+  },
+  "sanitization": {
+    "fields": [
+      "OEM/customer names",
+      "robot/asset serial numbers",
+      "people and account identifiers",
+      "contact information",
+      "contract/NDA references",
+      "internal absolute paths"
+    ],
+    "applied_changes": [
+      {
+        "source_file": "docs/canary/demo/case1_lidar/REF-PUDU-LIDAR-001.json",
+        "json_path": "opened_by",
+        "replacement": "customer_tier1_support"
+      },
+      {
+        "source_file": "docs/canary/demo/case1_lidar/SREF-HESAI-LIDAR-001.json",
+        "json_path": "opened_by",
+        "replacement": "sensor_fae_intake"
+      }
+    ],
+    "not_present": [
+      "robot/asset serial numbers",
+      "contact information",
+      "contract/NDA references",
+      "internal absolute paths"
+    ],
+    "immutable_identifier_note": "Artifact IDs and ID references are retained verbatim as required; identity-like tokens embedded in identifiers are treated as frozen opaque IDs."
+  }
+}

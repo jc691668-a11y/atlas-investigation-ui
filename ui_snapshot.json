@@ -1,0 +1,383 @@
+{
+  "snapshot_format": "atlas_ui_demo_snapshot_v1",
+  "baseline_version": "v0.1.0",
+  "realtime": false,
+  "declarations": {
+    "zh": "Atlas v0.1.0 冻结Baseline Case 1 LiDAR产物 · 已脱敏静态演示 · 非实时数据",
+    "en": "Atlas v0.1.0 frozen baseline Case 1 LiDAR artifacts · Sanitized static demo · Not live data"
+  },
+  "artifacts": [
+    {
+      "source_file": "docs/canary/demo/case1_lidar/AGENT-OBS-LIDAR-001.json",
+      "artifact": {
+        "artifact_id": "AGENT-OBS-LIDAR-001",
+        "artifact_type": "atlas_agent_observation",
+        "source_ref_id": "REF-PUDU-LIDAR-001",
+        "observation_window": {
+          "start": "2026-07-04T13:20:05+08:00",
+          "end": "2026-07-04T13:20:18+08:00"
+        },
+        "findings": [
+          "LiDAR heartbeat timeout observed.",
+          "Point cloud missing during the stop window.",
+          "USB Camera healthy.",
+          "MIPI healthy."
+        ],
+        "claim_boundary": [
+          "This observation does not assign fault to a supplier or subsystem.",
+          "This observation does not state IR or LL.",
+          "This observation does not confirm hardware fault, network fault, or software fault.",
+          "This observation does not replace human investigation."
+        ]
+      }
+    },
+    {
+      "source_file": "docs/canary/demo/case1_lidar/CLOSE-PUDU-LIDAR-001.json",
+      "artifact": {
+        "artifact_id": "CLOSE-PUDU-LIDAR-001",
+        "artifact_type": "oem_investigation_closure",
+        "source_ref_id": "REF-PUDU-LIDAR-001",
+        "closure_state": "closed",
+        "final_artifact_links": {
+          "oem_ir_id": "IR-OEM-LIDAR-001",
+          "oem_ll_id": "LL-OEM-LIDAR-001",
+          "oem_match_id": "MATCH-OEM-LIDAR-001",
+          "sensor_closure_id": "SCLOSE-LIDAR-001",
+          "historical_asset_update_target": "OEM-RGA-LIDAR-001"
+        },
+        "closure_note": "OEM closed the customer incident after the human final IR and LL were recorded and the historical OEM RGA was marked for update with the new bounded chain.",
+        "claim_boundary": [
+          "This closure records the completed investigation chain only.",
+          "This closure does not assign blame or liability.",
+          "This closure does not add technical conclusions beyond linked artifacts.",
+          "This closure does not replace the historical asset itself."
+        ]
+      }
+    },
+    {
+      "source_file": "docs/canary/demo/case1_lidar/EGP-LIDAR-001.json",
+      "artifact": {
+        "artifact_id": "EGP-LIDAR-001",
+        "artifact_type": "execution_guidance_package",
+        "source_ref_id": "REF-PUDU-LIDAR-001",
+        "source_match_id": "MATCH-OEM-LIDAR-001",
+        "tier2_execution": [
+          "ip link: Ethernet link unavailable.",
+          "ping LiDAR IP: unreachable.",
+          "tcpdump UDP point-cloud ports: no packets observed.",
+          "verify config: host IP and LiDAR IP are configured for the expected subnet.",
+          "ros2 topic hz /lidar/points: 0 Hz."
+        ],
+        "execution_result": [
+          "Tier2 followed the historical OEM investigation path.",
+          "The blocking condition was identified before ROS-level recovery: Ethernet link unavailable.",
+          "Atlas generated this EGP for sensor FAE escalation and on-site handling."
+        ],
+        "escalation_target": {
+          "target_ref_id": "SREF-HESAI-LIDAR-001",
+          "package_role": "hand off evidence summary and executed check results"
+        },
+        "claim_boundary": [
+          "This EGP records executed checks and escalation packaging only.",
+          "This EGP does not write IR or LL.",
+          "This EGP does not assign cause, blame, or liability.",
+          "This EGP does not conclude hardware fault."
+        ]
+      }
+    },
+    {
+      "source_file": "docs/canary/demo/case1_lidar/EP-PUDU-LIDAR-001.json",
+      "artifact": {
+        "artifact_id": "EP-PUDU-LIDAR-001",
+        "artifact_type": "runtime_ep_summary",
+        "source_ref_id": "REF-PUDU-LIDAR-001",
+        "source_observation_id": "AGENT-OBS-LIDAR-001",
+        "time_window": {
+          "start": "2026-07-04T13:20:00+08:00",
+          "deviation": "2026-07-04T13:20:07+08:00",
+          "end": "2026-07-04T13:20:18+08:00"
+        },
+        "observed_signals": [
+          "/lidar/points: no data in deviation window.",
+          "lidar_heartbeat: timeout.",
+          "usb_camera/status: healthy.",
+          "mipi/status: healthy."
+        ],
+        "source_hashes": {
+          "upload_bundle_id": "BUNDLE-PUDU-LIDAR-001",
+          "bundle_hash": "4f0d0fd8e9f7f3a84413f4eb2dbf4f0e5483c8b8f45ed1f4ebaf0d59a8a0d001",
+          "rosbag_slice_hash": "aa83d7f8e622d94ba5f05d632cf1ab73a1f8b6b63eec5fdb76197c1d2e97e111",
+          "topic_index_hash": "90a4dc7aaf9e83fe9ca21fc3d47f2d71e7d94c7b4fc7a9f95521cc80161ac222"
+        },
+        "window_summary": {
+          "pre_guard": "Robot was operating normally before the deviation.",
+          "deviation": "Stop coincided with LiDAR heartbeat timeout and point cloud loss.",
+          "recovery": "Repeated reboot attempts in the same service session did not restore operation."
+        },
+        "claim_boundary": [
+          "This EP is metadata-only and does not embed raw payload contents.",
+          "This EP does not assert cause or root cause.",
+          "This EP does not assign blame or liability.",
+          "This EP does not state IR or LL."
+        ]
+      }
+    },
+    {
+      "source_file": "docs/canary/demo/case1_lidar/IR-OEM-LIDAR-001.json",
+      "artifact": {
+        "claim_boundary": "Atlas provides investigation context only. Human investigator keeps final judgment.",
+        "ir_id": "IR-OEM-LIDAR-001",
+        "known_limitations": [
+          "The IR is bounded to the referenced runtime window.",
+          "The IR records human review context and does not expand beyond linked artifacts."
+        ],
+        "result_state": "known_ref_matched",
+        "source_ep_id": "EP-PUDU-LIDAR-001",
+        "source_ticket_id": "REF-PUDU-LIDAR-001",
+        "source_window_id": "WINDOW-PUDU-LIDAR-001",
+        "summary": "OEM Tier2 reviewed the bounded runtime window and the matched historical RGA; the case aligns with a known LiDAR communication investigation path and was resolved after network restoration.",
+        "tier_recommendation": "tier2_resolved"
+      }
+    },
+    {
+      "source_file": "docs/canary/demo/case1_lidar/LL-OEM-LIDAR-001.json",
+      "artifact": {
+        "event_signature": [
+          "unexpected_stop",
+          "lidar_heartbeat_timeout",
+          "point_cloud_loss"
+        ],
+        "investigation_steps": [
+          "review_bounded_runtime_window",
+          "compare_with_historical_oem_rga",
+          "review_sensor_closure_package",
+          "restore_network_path_and_recheck_stream"
+        ],
+        "known_limitations": [
+          "Reuse requires a bounded runtime window and linked sensor closure package.",
+          "Reuse does not replace case-specific human review."
+        ],
+        "ll_id": "LL-OEM-LIDAR-001",
+        "reuse_conditions": [
+          "Reuse when LiDAR heartbeat timeout and point cloud loss are present in one bounded unexpected stop window.",
+          "Reuse when the OEM historical RGA and sensor closure package are both linked."
+        ],
+        "source_ir_id": "IR-OEM-LIDAR-001",
+        "source_ticket_id": "REF-PUDU-LIDAR-001",
+        "summary": "Reusable OEM-side investigation note for bounded LiDAR unexpected-stop cases matched to historical RGA.",
+        "surface_pattern": [
+          "lidar",
+          "ethernet",
+          "ros2_topic"
+        ]
+      }
+    },
+    {
+      "source_file": "docs/canary/demo/case1_lidar/MATCH-OEM-LIDAR-001.json",
+      "artifact": {
+        "artifact_id": "MATCH-OEM-LIDAR-001",
+        "artifact_type": "historical_rga_pull_match",
+        "source_ref_id": "REF-PUDU-LIDAR-001",
+        "source_ep_id": "EP-PUDU-LIDAR-001",
+        "pull_strategy": [
+          "Atlas starts from Historical RGA assets before opening a fresh investigation branch.",
+          "Atlas pulled the OEM-side historical governance asset that matches unexpected stop plus LiDAR communication symptoms."
+        ],
+        "matched_historical_asset": {
+          "historical_id": "OEM-RGA-LIDAR-001",
+          "historical_markdown_hash": "0300e1a196597f78e5fb8862999ce7906ec7b34bf72266a3ec32d601de82f663",
+          "historical_json_hash": "78d25b825ecdca82d8eee63406dc6ed7f195b93671d7693a2213e192f8609231"
+        },
+        "historical_ir": "LiDAR communication lost; isolated to runtime data link (Ethernet), no LiDAR hardware fault.",
+        "historical_ll": "Unexpected stop investigations should begin with LiDAR communication checks.",
+        "historical_investigation_path": [
+          "ip link (LOWER_UP)",
+          "ping LiDAR IP",
+          "tcpdump UDP point-cloud ports",
+          "verify Livox MID360 config",
+          "ros2 topic hz"
+        ],
+        "why_retrieved": [
+          "Current event shows unexpected stop with LiDAR heartbeat timeout and missing point cloud.",
+          "Historical OEM RGA carries the same communication-loss pattern and provides the first investigation path.",
+          "Tier2 investigation therefore begins from Historical IR and Historical LL instead of starting from a blank sheet."
+        ],
+        "claim_boundary": [
+          "This match records Atlas retrieval structure only.",
+          "This match does not assert that the historical asset is the final answer for the current case.",
+          "This match does not assign blame or liability.",
+          "This match does not write new IR or LL for the current event."
+        ]
+      }
+    },
+    {
+      "source_file": "docs/canary/demo/case1_lidar/REF-PUDU-LIDAR-001.json",
+      "artifact": {
+        "ref_id": "REF-PUDU-LIDAR-001",
+        "ref_class": "customer_incident",
+        "opened_by": "customer_tier1_support",
+        "incident_summary": "Robot stopped unexpectedly during service and repeated restarts did not recover operation.",
+        "customer_report": "机器人运行中突然停止，多次重启无法恢复。",
+        "incident_type": "unexpected_stop",
+        "deployment_environment": "restaurant",
+        "severity": "service_impact",
+        "time_range": {
+          "start": "2026-07-04T13:20:00+08:00",
+          "end": "2026-07-04T13:47:00+08:00"
+        },
+        "runtime_evidence_available": true,
+        "runtime_evidence_ref": {
+          "upload_bundle_id": "BUNDLE-PUDU-LIDAR-001",
+          "artifact_hash": "4f0d0fd8e9f7f3a84413f4eb2dbf4f0e5483c8b8f45ed1f4ebaf0d59a8a0d001"
+        },
+        "claim_boundary": [
+          "This REF does not identify the failed component.",
+          "This REF does not assert cause or root cause.",
+          "This REF does not assign blame or liability.",
+          "This REF does not conclude whether the issue is from sensor, network, compute, ROS, or algorithm layers."
+        ]
+      }
+    },
+    {
+      "source_file": "docs/canary/demo/case1_lidar/SCLOSE-LIDAR-001.json",
+      "artifact": {
+        "artifact_id": "SCLOSE-LIDAR-001",
+        "artifact_type": "sensor_investigation_closure",
+        "source_sensor_ref_id": "SREF-HESAI-LIDAR-001",
+        "closure_state": "closed",
+        "return_package": {
+          "returned_egp_id": "EGP-LIDAR-001",
+          "sensor_ir_id": "SIR-LIDAR-001",
+          "sensor_ll_id": "SLL-LIDAR-001"
+        },
+        "closure_note": "Sensor-side investigation closed and returned to OEM with the completed package.",
+        "claim_boundary": [
+          "This sensor closure records chain completion only.",
+          "This sensor closure does not assign blame or liability.",
+          "This sensor closure does not write new IR or LL.",
+          "This sensor closure does not add technical conclusions beyond linked artifacts."
+        ]
+      }
+    },
+    {
+      "source_file": "docs/canary/demo/case1_lidar/SEP-LIDAR-001.json",
+      "artifact": {
+        "artifact_id": "SEP-LIDAR-001",
+        "artifact_type": "sensor_ep_summary",
+        "source_sensor_ref_id": "SREF-HESAI-LIDAR-001",
+        "source_egp_id": "EGP-LIDAR-001",
+        "sensor_side_evidence_summary": [
+          "Received OEM execution record showing Ethernet link unavailable.",
+          "Received no evidence of LiDAR internal fault alarms.",
+          "Received request for cable, switch, and IP verification on site."
+        ],
+        "evidence_mode": "metadata_only",
+        "claim_boundary": [
+          "This SEP is a metadata-only summary.",
+          "This SEP does not write IR or LL.",
+          "This SEP does not assign cause, blame, or liability.",
+          "This SEP does not conclude sensor hardware fault."
+        ]
+      }
+    },
+    {
+      "source_file": "docs/canary/demo/case1_lidar/SIR-LIDAR-001.json",
+      "artifact": {
+        "artifact_id": "SIR-LIDAR-001",
+        "artifact_type": "human_investigation_result",
+        "source_sensor_ref_id": "SREF-HESAI-LIDAR-001",
+        "source_sensor_match_id": "SMATCH-LIDAR-001",
+        "summary": "Historical pattern matched. Ethernet connection issue observed. No LiDAR hardware fault observed.",
+        "investigation_highlights": [
+          "FAE checked cable, switch, and IP path on site.",
+          "Loose connector was found and reseated.",
+          "LiDAR hardware replacement was not indicated."
+        ],
+        "claim_boundary": [
+          "This SIR records a human-entered investigation result.",
+          "This SIR does not assign blame or liability.",
+          "This SIR does not turn the recorded observation into supplier liability.",
+          "This SIR does not claim evidence outside the bounded investigation record."
+        ]
+      }
+    },
+    {
+      "source_file": "docs/canary/demo/case1_lidar/SLL-LIDAR-001.json",
+      "artifact": {
+        "artifact_id": "SLL-LIDAR-001",
+        "artifact_type": "human_lesson_learned",
+        "source_sensor_ref_id": "SREF-HESAI-LIDAR-001",
+        "source_sensor_ir_id": "SIR-LIDAR-001",
+        "lesson_summary": "Verify Ethernet connection before replacing LiDAR.",
+        "prevention_notes": [
+          "Confirm connector seating first.",
+          "Confirm switch port status next.",
+          "Confirm IP reachability before replacement planning."
+        ],
+        "claim_boundary": [
+          "This SLL records a human-entered lesson learned.",
+          "This SLL does not assign blame or liability.",
+          "This SLL does not state that every similar event has the same cause.",
+          "This SLL does not mandate replacement."
+        ]
+      }
+    },
+    {
+      "source_file": "docs/canary/demo/case1_lidar/SMATCH-LIDAR-001.json",
+      "artifact": {
+        "artifact_id": "SMATCH-LIDAR-001",
+        "artifact_type": "sensor_historical_rga_pull_match",
+        "source_sensor_ref_id": "SREF-HESAI-LIDAR-001",
+        "source_sensor_ep_id": "SEP-LIDAR-001",
+        "pull_strategy": [
+          "Atlas pulls the sensor-side Historical RGA before the FAE writes a current-case conclusion.",
+          "The sensor-side pattern is aligned to Ethernet link loss handling."
+        ],
+        "matched_historical_asset": {
+          "historical_id": "SENSOR-RGA-LIDAR-001",
+          "historical_markdown_hash": "a8a7a6ae96a6ab05c770994270c19c62928414c3f96372341a6fd10c5cf89f87",
+          "historical_json_hash": "6f59fcdde855ea783c956a8ee617a0ab6a47fb59a74662aea24b07fa80c14698"
+        },
+        "historical_ir": "Ethernet connection issue observed at sensor side; loose connector; no LiDAR hardware fault.",
+        "historical_ll": "Verify Ethernet connection before replacing LiDAR.",
+        "historical_investigation_path": [
+          "check cable",
+          "check switch",
+          "check IP"
+        ],
+        "why_retrieved": [
+          "Sensor FAE received an OEM EGP that already isolated the issue to missing Ethernet link.",
+          "Historical sensor RGA gives the on-site verification path before any replacement decision."
+        ],
+        "claim_boundary": [
+          "This sensor match records Atlas retrieval structure only.",
+          "This sensor match does not assign blame or liability.",
+          "This sensor match does not write new IR or LL for the current case.",
+          "This sensor match does not conclude that replacement is required."
+        ]
+      }
+    },
+    {
+      "source_file": "docs/canary/demo/case1_lidar/SREF-HESAI-LIDAR-001.json",
+      "artifact": {
+        "ref_id": "SREF-HESAI-LIDAR-001",
+        "ref_class": "sensor_fae_service_ref",
+        "opened_by": "sensor_fae_intake",
+        "parent_ref_id": "REF-PUDU-LIDAR-001",
+        "source_egp_id": "EGP-LIDAR-001",
+        "intake_summary": "Sensor-side investigation opened after OEM Tier2 observed Ethernet link unavailable while LiDAR communication was missing.",
+        "intake_scope": [
+          "Check cable.",
+          "Check switch.",
+          "Check IP connectivity."
+        ],
+        "claim_boundary": [
+          "This SREF opens a sensor FAE work item only.",
+          "This SREF does not assign root cause, blame, or liability.",
+          "This SREF does not write IR or LL.",
+          "This SREF does not conclude sensor hardware fault."
+        ]
+      }
+    }
+  ]
+}
