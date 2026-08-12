@@ -20,6 +20,7 @@ main { height: calc(100vh - 118px); min-height: 720px; grid-template-columns: mi
 .case-card span b, .case-card i { font-size: 11px; }
 .case-card strong { margin-block: 9px 5px; font-size: 14px; }
 .scope-card { padding: 16px; }
+.scope-card p { white-space: pre-line; }
 .workspace-head { padding: 22px 26px 18px; }
 .workspace-head h1 { font-size: 26px; line-height: 1.2; }
 .workspace-head p:last-child, .view-switcher button, .status { font-size: 12px; }

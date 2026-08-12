@@ -7,13 +7,14 @@ const readUi=async()=>({
   html:await readFile("public/index.html","utf8")
 });
 
-test("governance boundary explains that historical cases are references only",async()=>{
+test("queue shows the current investigation progress",async()=>{
   const {app,html}=await readUi();
-  assert.match(app,/历史案例仅供参考/);
-  assert.match(app,/不会自动判定根因或责任/);
-  assert.match(app,/调查结论、对外响应、案件关闭和知识入库均须由授权人员确认/);
-  assert.match(html,/Historical cases are references only/);
-  assert.doesNotMatch(app,/治理边界回召仅提供候选项|回召仅提供候选项/);
+  assert.match(app,/调查进度/);
+  assert.match(app,/已完成 6 \/ 10 个阶段/);
+  assert.match(app,/当前：层级候选/);
+  assert.match(app,/下一步：生成传感器协作包 EGP/);
+  assert.match(html,/INVESTIGATION PROGRESS/);
+  assert.doesNotMatch(html,/GOVERNANCE BOUNDARY|Historical cases are references only/);
 });
 
 test("right rail is an investigation assistant with explicit read-only limits",async()=>{
