@@ -21,7 +21,7 @@ test('Atlas V3 keeps the ten-stage investigation lifecycle',()=>{
 test('Atlas V3 keeps queue, lifecycle workspace, and Assist columns',()=>{
   for(const column of ['queue','workspace','assist'])assert.ok(html.includes(`data-layout-column="${column}"`));
   assert.match(html,/REF INVESTIGATION QUEUE/);
-  assert.match(html,/ATLAS ASSIST/);
+  assert.match(html,/ATLAS INVESTIGATION ASSIST/);
   assert.match(html,/id="investigation-chain"/);
 });
 
