@@ -2,40 +2,43 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createHash} from 'node:crypto';
 import {readFile} from 'node:fs/promises';
+import {rangesOverlap} from '../public/event-time.js';
 
 const app=await readFile('public/app.js','utf8');
 const snapshotBytes=await readFile('public/data/lidar_case1_frozen_v0.1.0/ui_snapshot.json');
 const manifestBytes=await readFile('public/data/lidar_case1_frozen_v0.1.0/manifest.json');
 
-test('English and Chinese EP views define the evidence windows without promoting a candidate to T0',()=>{
-  for(const label of ['Pre-event Window','Near-event Window','Post-event Window','Post-event Guard Window','Candidate Event Anchor'])assert.ok(app.includes(label),`missing English evidence label: ${label}`);
-  for(const label of ['事件前窗口','临近事件窗口','事件后窗口','事件后保护窗口','候选事件锚点'])assert.ok(app.includes(label),`missing Chinese evidence label: ${label}`);
-  assert.ok(app.includes("notProvided:'Not provided by snapshot'"));
-  assert.ok(app.includes("notProvided:'快照未提供'"));
-});
-
-test('manual, Atlas-detected, and undetermined anchor sources have bilingual governance copy',()=>{
-  for(const text of ['Manually specified','人工指定','Atlas auto-detected','Atlas 自动检测','Submitted by','提交人','Submitted at','提交时间','Trigger signal','触发信号','Trigger rule / version','触发规则／规则版本','Pending human confirmation','待人工确认','Confirmed','已确认','Candidate EP / Not frozen','候选 EP／尚未冻结'])assert.ok(app.includes(text),`missing anchor copy: ${text}`);
-  assert.match(app,/function anchorKind\(artifact\)/);
-  assert.match(app,/artifact\.anchor_source\?\?/);
-  assert.match(app,/artifact\.trigger_signal/);
-  assert.match(app,/artifact\.trigger_rule/);
-  assert.match(app,/artifact\.confirmation_status/);
-});
-
-test('candidate copy forbids formal T0 and frozen-window claims when source metadata is absent',()=>{
-  for(const text of ['This time is only a candidate event anchor; it is not a formal T0, and the five-part window is not frozen.','该时间仅为候选事件锚点，不是正式 T0，五段窗口尚未冻结。'])assert.ok(app.includes(text));
-  assert.match(app,/kind==='candidate'/);
-  assert.match(app,/isCandidate\?copy\.candidateAnchor:copy\.anchor/);
-});
-
-test('event anchor, anomaly duration, and REF creation are displayed as distinct concepts',()=>{
-  for(const text of ['Event Anchor T0','事件锚点 T0','Anomaly duration','异常持续时段','REF created at','REF 创建时间'])assert.ok(app.includes(text));
+test('EP timing distinguishes reported, retrieval, observation, T0, and REF creation concepts',()=>{
+  for(const label of ['Customer-reported time','Atlas retrieval range','Atlas observation','Event Anchor T0','REF created at','客户报告时间','Atlas 检索范围','Atlas 观察','事件锚点 T0','REF 创建时间'])assert.ok(app.includes(label),`missing timing label: ${label}`);
+  assert.match(app,/ref\.customer_report_time_range\?\?ref\.reported_time_range\?\?ref\.time_range/);
+  assert.match(app,/observation\.observation_window\?\?artifact\.observation_window/);
+  assert.match(app,/artifact\.anchor_t0\?\?artifact\.canonical_event_t0/);
   assert.match(app,/ref\.created_at\?\?ref\.ref_created_at/);
 });
 
-test('the window display retains the original time_window disclosure',()=>{
-  assert.match(app,/evidenceTimeline\(val,kind\)/);
+test('missing optional ranges are hidden rather than rendered as unavailable placeholders',()=>{
+  assert.match(app,/customer&&`<div class="time-track customer"/);
+  assert.match(app,/retrieval&&`<div class="retrieval-row"/);
+  assert.doesNotMatch(app,/快照未提供|Not provided by snapshot/);
+});
+
+test('non-overlapping report and observation require human confirmation',()=>{
+  const report={start:'2026-08-12T13:00:00Z',end:'2026-08-12T15:00:00Z'};
+  const observed={start:'2026-08-12T12:00:00Z',end:'2026-08-12T12:30:00Z'};
+  assert.equal(rangesOverlap(report,observed),false);
+  assert.ok(app.includes('Atlas在客户报告时间之外发现相关异常，需人工确认是否属于同一事件。'));
+  assert.ok(app.includes('Atlas found a related anomaly outside the customer-reported time. Human confirmation is required to determine whether it belongs to the same incident.'));
+});
+
+test('overlap is not automatically claimed as the same incident',()=>{
+  assert.equal(rangesOverlap({start:'2026-08-12T13:00:00Z',end:'2026-08-12T15:00:00Z'},{start:'2026-08-12T14:00:00Z',end:'2026-08-12T14:30:00Z'}),true);
+  assert.ok(app.includes('human confirmation is still required before treating them as the same incident'));
+  assert.ok(app.includes('仍需人工确认是否属于同一事件'));
+});
+
+test('frozen EP retains five windows and raw time-window disclosure without candidate language',()=>{
+  for(const label of ['Pre-event Window','Near-event Window','Post-event Window','Post-event Guard Window','事件前窗口','临近事件窗口','事件后窗口','事件后保护窗口','Frozen EP','冻结 EP'])assert.ok(app.includes(label));
+  assert.doesNotMatch(app,/Candidate EP|候选 EP|Candidate Event Anchor|候选事件锚点|Not frozen|尚未冻结/);
   assert.match(app,/JSON\.stringify\(timeWindow,null,2\)/);
   assert.match(app,/time-window-original/);
 });
