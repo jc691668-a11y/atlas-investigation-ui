@@ -1,52 +1,33 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Atlas Shared Investigation Workspace V2 — sanitized demo evidence">
-  <title>Atlas · Shared Investigation Workspace</title>
-  <link rel="stylesheet" href="/styles.css">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Atlas Runtime Governance Infrastructure V3 — sanitized demonstration data">
+  <title>Atlas · Runtime Governance Infrastructure</title><link rel="stylesheet" href="/styles.css">
 </head>
 <body>
   <header class="topbar">
-    <div class="brand"><span class="mark">A</span><div><b>Atlas</b><small>SHARED INVESTIGATION</small></div></div>
-    <nav class="view-switcher" aria-label="Workspace view">
-      <button data-view="oem" class="active">OEM View</button><button data-view="partner">Sensor Partner View</button><button data-view="shared">Shared Evidence View</button>
+    <a class="brand" href="#"><span class="mark">A</span><span><b>Atlas Agent™</b><small>RUNTIME GOVERNANCE INFRASTRUCTURE</small></span></a>
+    <nav id="global-nav" class="global-nav" aria-label="Global navigation">
+      <button data-page="overview" class="active">Runtime Overview</button><button data-page="datasets">Datasets</button><button data-page="ep">Evidence Packs</button><button data-page="investigations">Investigations</button><button data-page="rga">Historical RGA</button><button data-page="egp">Sensor Engagement</button><button data-page="vault">Assist Vault</button><button data-page="cto">CTO Dashboard</button>
     </nav>
-    <div class="header-actions"><span class="demo-pill">● DEMO DATA</span><button class="icon-button" aria-label="Notifications">◌</button><span class="avatar">AM</span></div>
+    <div class="header-actions"><span class="demo-pill">SANITIZED DEMO DATA</span><span class="avatar">AM</span></div>
   </header>
-  <div class="boundary"><strong>DEMO DATA</strong><span>Sanitized fictional records · not production evidence</span><span class="boundary-rule">Claim Boundary: evidence coordination only</span></div>
+  <div class="boundary"><strong>SANITIZED DEMO DATA</strong><span>Fictional runtime records · human-governed investigation</span><span class="boundary-rule">No automatic root cause, responsibility, Closure, or Vault write</span></div>
   <main>
-    <aside class="navigator">
-      <div class="panel-title"><div><p class="eyebrow">CASE NAVIGATOR</p><h2>Investigations</h2></div><button class="filter" aria-label="Filter cases">⌁</button></div>
-      <label class="search"><span>⌕</span><input id="case-search" type="search" placeholder="Search demo cases" aria-label="Search demo cases"></label>
-      <div class="case-list" id="case-list"></div>
-      <div class="scope-card"><span>SHARED WORKSPACE</span><strong>Read-only evidence exchange</strong><p>No root-cause finding, automatic closure, or Assist Vault write is available.</p></div>
+    <aside class="queue">
+      <div class="panel-title"><div><p class="eyebrow">REF INVESTIGATION QUEUE</p><h2>Runtime signals</h2></div><span class="count">3 OPEN</span></div>
+      <label class="search"><span>⌕</span><input id="case-search" type="search" placeholder="Search REF investigations" aria-label="Search investigations"></label>
+      <div id="case-list" class="case-list"></div>
+      <div class="scope-card"><span>GOVERNANCE BOUNDARY</span><strong>Recall proposes candidates only</strong><p>Human reviewers own findings, response, Closure, and authorization.</p></div>
     </aside>
-
     <section class="workspace">
-      <div class="case-heading">
-        <div><div class="crumb">Cases / <span id="crumb-id"></span></div><h1 id="case-title"></h1><p id="case-subtitle"></p></div>
-        <div class="heading-actions"><span id="case-status" class="status"></span><button class="outline">↥ Export demo</button></div>
-      </div>
-      <div class="context-bar"><div><span>CASE ID</span><b id="meta-id"></b></div><div><span>ASSET</span><b id="meta-asset"></b></div><div><span>OPENED</span><b id="meta-opened"></b></div><div><span>PARTNER</span><b id="meta-partner"></b></div><div><span>VISIBILITY</span><b id="meta-visibility"></b></div></div>
-      <div id="investigation-chain" class="artifact-chain" aria-label="Persistent Investigation Chain"></div>
-      <nav class="tabs" aria-label="Case sections">
-        <button data-tab="overview" class="active">Overview</button><button data-tab="dataset">Dataset</button><button data-tab="ep">Evidence Pack</button><button data-tab="ref">REF</button><button data-tab="rga">RGA Recall</button><button data-tab="context">Context &amp; Tier</button><button data-tab="egp">EGP</button><button data-tab="responses">IR / LL</button><button data-tab="closure">Closure</button><button data-tab="raw">Raw Details</button>
-      </nav>
-      <div id="tab-content" class="tab-content"></div>
-      <footer class="workspace-footer"><strong>Atlas safeguards active</strong><span>Human review required</span><span>No root-cause conclusion</span><span>No automatic case closure</span><span>No Assist Vault write</span></footer>
+      <div class="workspace-head"><div><p class="eyebrow" id="page-eyebrow">ATLAS INVESTIGATION WORKSPACE</p><h1 id="page-title">Runtime investigation</h1><p id="page-subtitle"></p></div><div class="head-controls"><div class="view-switcher" aria-label="Data boundary"><button data-view="oem" class="active">OEM View</button><button data-view="fae">Sensor FAE View</button></div><span id="case-status" class="status"></span></div></div>
+      <div id="role-boundary" class="role-boundary"></div>
+      <div id="investigation-chain" class="artifact-chain" aria-label="Investigation lifecycle"></div>
+      <div id="page-content" class="page-content"></div>
+      <footer><b>Atlas safeguards active</b><span>Human review required</span><span>root_cause_inferred=false</span><span>Authorized IR/LL only</span></footer>
     </section>
-
-    <aside class="copilot">
-      <div class="copilot-head"><div class="spark">✦</div><div><p class="eyebrow">ATLAS COPILOT</p><h2>Investigation assistant</h2></div><span class="online">LOCAL</span></div>
-      <div class="copilot-boundary"><strong>DRAFT · AI-ASSISTED</strong><p>Deterministic guidance using the selected sanitized demo case only. Never a root-cause determination.</p></div>
-      <div id="chat" class="chat" aria-live="polite"></div>
-      <div id="suggestions" class="suggestions"></div>
-      <form id="chat-form" class="composer"><input id="chat-input" placeholder="Ask about this demo case…" autocomplete="off"><button aria-label="Send">↑</button></form>
-      <p class="copilot-note">Copilot cannot close cases, write to Vault, or make final decisions.</p>
-    </aside>
-  </main>
-  <script type="module" src="/app.js"></script>
-</body>
-</html>
+    <aside class="assistant-rail"><div class="assistant-head"><span class="spark">✦</span><div><p class="eyebrow">ATLAS ASSIST</p><h2>Artifact helper</h2></div><i>LOCAL</i></div><div class="assistant-note"><b>DRAFT · SUPPORTING ROLE</b><p>Summarizes the selected sanitized artifacts. It cannot determine cause or take governance actions.</p></div><div id="chat" class="chat"></div><div id="suggestions" class="suggestions"></div></aside>
+  </main><script type="module" src="/app.js"></script>
+</body></html>
