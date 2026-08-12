@@ -3,43 +3,29 @@ const [snapshot,manifest]=await Promise.all([
   fetch(`${DATA_ROOT}/ui_snapshot.json`).then(readJson),
   fetch(`${DATA_ROOT}/manifest.json`).then(readJson)
 ]);
-
 function readJson(response){if(!response.ok)throw new Error(`Frozen data unavailable (${response.status})`);return response.json()}
 const $=selector=>document.querySelector(selector);
-const esc=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+const esc=value=>String(value??'').replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
 const locale=location.pathname.startsWith('/zh')?'zh':'en';
 const copy={
-  en:{declaration:'Atlas v0.1.0 frozen baseline · sanitized static demo · not live data',title:'Case 1 LiDAR artifacts',subtitle:'14 committed and verified frozen artifacts — not an 18-file run_demo.sh rerun',artifacts:'Frozen artifacts',source:'Source & integrity',sanitization:'Sanitization',sourceLabel:'Source directory',commit:'Source commit',hash:'Snapshot SHA-256',count:'Artifact count',note:'Sanitization note',boundary:'Read-only static presentation. No Jetson/NUC connection, CLI, backend, live execution, or device status.',back:'Back to official demo page',select:'Select an artifact to inspect its unmodified snapshot fields.'},
-  zh:{declaration:'Atlas v0.1.0 冻结基线 · 已脱敏静态演示 · 非实时数据',title:'Case 1 LiDAR 产物',subtitle:'14 个已提交并验证的冻结产物——并非 run_demo.sh 的 18 文件重新运行结果',artifacts:'冻结产物',source:'来源与完整性',sanitization:'脱敏说明',sourceLabel:'来源目录',commit:'来源提交',hash:'快照 SHA-256',count:'产物数量',note:'脱敏说明',boundary:'只读静态展示。不连接 Jetson/NUC，不运行 CLI，不调用后端，不执行实时任务，也不显示设备状态。',back:'返回官网演示页',select:'选择产物以查看快照中的原始字段。'}
+ en:{declaration:'Atlas v0.1.0 frozen baseline · sanitized static demo · not live data',back:'Back to official demo page',provenance:'Provenance',source:'Source & integrity',queue:'REF INVESTIGATION QUEUE',signals:'Runtime signals',boundary:'GOVERNANCE BOUNDARY',recall:'Recall proposes candidates only',human:'Human reviewers own findings, response, Closure, and authorization.',workspace:'ATLAS INVESTIGATION WORKSPACE',investigation:'Runtime investigation',assist:'ATLAS ASSIST',helper:'Artifact helper',draft:'DRAFT · SUPPORTING ROLE',assistNote:'Summarizes selected frozen artifacts. It cannot determine cause or take governance actions.',search:'Search REF investigations',oem:'OEM DATA BOUNDARY',oemText:'Dataset custody · operational context · OEM Response · Closure authority',fae:'SENSOR FAE DATA BOUNDARY',faeText:'Shared EP subset · sensor runtime profile · questions · Sensor IR / Sensor LL response',selected:'SELECTED STAGE',frozen:'FROZEN ARTIFACT',sourceCommit:'Source commit',hash:'Snapshot SHA-256',sourceDirectory:'Source directory',version:'Manifest version',sanitization:'Sanitization',artifacts:'14 frozen artifacts',select:'Select a lifecycle stage to inspect its frozen snapshot artifact. Values are displayed verbatim; this is not an 18-file run_demo.sh rerun.',notAvailable:'No distinct frozen artifact is assigned to this governance stage.'},
+ zh:{declaration:'Atlas v0.1.0 冻结基线 · 已脱敏静态演示 · 非实时数据',back:'返回官网演示页',provenance:'数据来源',source:'数据来源 / Provenance',queue:'REF 调查队列',signals:'运行时信号',boundary:'治理边界',recall:'回召仅提供候选项',human:'人工审查者负责结论、响应、结案和授权。',workspace:'ATLAS 调查工作区',investigation:'运行时调查',assist:'ATLAS 辅助',helper:'工件助手',draft:'草稿 · 辅助角色',assistNote:'汇总已选择的冻结工件。不能判定原因或执行治理操作。',search:'搜索 REF 调查',oem:'OEM 数据边界',oemText:'数据集保管 · 运行上下文 · OEM 响应 · 结案权限',fae:'传感器 FAE 数据边界',faeText:'共享 EP 子集 · 传感器运行时配置 · 问题 · 传感器 IR / LL 响应',selected:'已选阶段',frozen:'冻结工件',sourceCommit:'来源提交',hash:'快照 SHA-256',sourceDirectory:'来源目录',version:'Manifest 版本',sanitization:'脱敏说明',artifacts:'14 个冻结工件',select:'选择生命周期阶段以查看其冻结快照工件。数值按原样显示。',notAvailable:'此治理阶段没有单独的冻结工件。'}
 }[locale];
-document.documentElement.lang=locale;
-document.title=`Atlas 天枢 · ${copy.title}`;
-$('#declaration').textContent=copy.declaration;
-$('#page-title').textContent=copy.title;
-$('#page-subtitle').textContent=copy.subtitle;
-$('#artifact-heading').textContent=copy.artifacts;
-$('#source-heading').textContent=copy.source;
-$('#sanitization-heading').textContent=copy.sanitization;
-$('#scope-copy').textContent=copy.boundary;
-$('#back-link').textContent=copy.back;
-document.querySelectorAll('.language-switcher a').forEach(link=>link.classList.toggle('active',link.dataset.locale===locale));
-
-const metadata=[
-  [copy.sourceLabel,manifest.source_directory],
-  [copy.commit,manifest.source_commit],
-  [copy.hash,manifest.ui_snapshot.sha256],
-  [copy.count,manifest.artifact_count]
-];
-$('#manifest-metadata').innerHTML=metadata.map(([label,value])=>`<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('');
-$('#sanitization-copy').innerHTML=`<p>${esc(manifest.sanitization.immutable_identifier_note)}</p><div class="tokens">${manifest.sanitization.fields.map(field=>`<span>${esc(field)}</span>`).join('')}</div>`;
-
-let selected=0;
-function artifactId(entry){return entry.artifact.artifact_id||entry.artifact.ref_id||entry.artifact.ir_id||entry.artifact.ll_id}
-function render(){
-  $('#artifact-list').innerHTML=snapshot.artifacts.map((entry,index)=>`<button class="artifact-item ${index===selected?'active':''}" data-index="${index}"><b>${String(index+1).padStart(2,'0')} · ${esc(artifactId(entry))}</b><span>${esc(entry.artifact.artifact_type||entry.artifact.ref_class||'governed_artifact')}</span><small>${esc(entry.source_file)}</small></button>`).join('');
-  const entry=snapshot.artifacts[selected];
-  $('#artifact-detail').innerHTML=`<div class="card-head"><div><p class="eyebrow">${esc(entry.artifact.artifact_type||entry.artifact.ref_class||'FROZEN ARTIFACT')}</p><h2>${esc(artifactId(entry))}</h2></div><span>SHA-256 VERIFIED SOURCE</span></div><p class="source-path">${esc(entry.source_file)}</p><pre>${esc(JSON.stringify(entry.artifact,null,2))}</pre>`;
-  document.querySelectorAll('[data-index]').forEach(button=>button.onclick=()=>{selected=Number(button.dataset.index);render()});
-}
-$('#artifact-help').textContent=copy.select;
-render();
+const navZh={'Runtime Overview':'运行时概览','Datasets':'数据集','Evidence Packs':'证据包','Investigations':'调查','Historical RGA':'历史 RGA','Sensor Engagement':'传感器协作','Assist Vault':'辅助知识库','CTO Dashboard':'CTO 仪表板','Dataset':'数据集','Context':'上下文','Tier':'层级','Closure':'结案','Vault':'知识库','OEM View':'OEM 视图','Sensor FAE View':'传感器 FAE 视图'};
+const artifactId=entry=>entry?.artifact?.artifact_id||entry?.artifact?.ref_id||entry?.artifact?.ir_id||entry?.artifact?.ll_id;
+const byId=Object.fromEntries(snapshot.artifacts.map(entry=>[artifactId(entry),entry]));
+const stages=[['dataset','Dataset','AGENT-OBS-LIDAR-001'],['ep','EP','EP-PUDU-LIDAR-001'],['ref','REF','REF-PUDU-LIDAR-001'],['rga','RGA','MATCH-OEM-LIDAR-001'],['context','Context','SREF-HESAI-LIDAR-001'],['tier','Tier','SEP-LIDAR-001'],['egp','EGP','EGP-LIDAR-001'],['results','IR/LL','IR-OEM-LIDAR-001'],['closure','Closure','CLOSE-PUDU-LIDAR-001'],['vault','Vault','LL-OEM-LIDAR-001']];
+let stage='dataset',page='overview',view='oem';
+function setStaticCopy(){document.documentElement.lang=locale;$('#declaration').textContent=copy.declaration;$('#back-link').textContent=copy.back;$('#provenance-button').textContent=copy.provenance;$('#provenance-title').textContent=copy.source;$('.queue .eyebrow').textContent=copy.queue;$('.queue h2').textContent=copy.signals;$('.scope-card span').textContent=copy.boundary;$('.scope-card strong').textContent=copy.recall;$('.scope-card p').textContent=copy.human;$('#case-search').placeholder=copy.search;$('.assistant-head .eyebrow').textContent=copy.assist;$('.assistant-head h2').textContent=copy.helper;$('.assistant-note b').textContent=copy.draft;$('.assistant-note p').textContent=copy.assistNote;$('#back-link').href='https://www.sensordeck.ai/atlas-demo';document.querySelectorAll('.language-switcher a').forEach(a=>a.classList.toggle('active',a.dataset.locale===locale));if(locale==='zh')document.querySelectorAll('[data-page], [data-view]').forEach(el=>{el.textContent=navZh[el.textContent]||el.textContent})}
+function renderCase(){const ref=byId['REF-PUDU-LIDAR-001'].artifact;$('#case-list').innerHTML=`<button class="case-card active"><span><b>${esc(ref.ref_id)}</b><i>FROZEN</i></span><strong>${esc(ref.incident_summary)}</strong><small>${esc(ref.deployment_environment)}</small><em>${esc(ref.severity)}</em></button>`}
+function renderChain(){$('#investigation-chain').innerHTML=`<div class="chain-title"><b>INVESTIGATION LIFECYCLE</b><span>Dataset → EP → REF → RGA → Context → Tier → EGP → IR/LL → Closure → Vault</span></div><div class="chain-flow">${stages.map(([key,label,id],i)=>`<button data-stage="${key}" data-artifact="${id}" class="${stage===key?'active':''}"><i>${String(i+1).padStart(2,'0')}</i><b>${locale==='zh'?(navZh[label]||label):label}</b><small>Frozen</small><span>Human governed</span></button>`).join('<i class="arrow">→</i>')}</div>`;document.querySelectorAll('[data-stage]').forEach(button=>button.onclick=()=>{stage=button.dataset.stage;render()})}
+function value(v){return typeof v==='object'?`<pre>${esc(JSON.stringify(v,null,2))}</pre>`:esc(v)}
+function artifactCard(entry){if(!entry)return `<div class="guardrail"><b>${copy.notAvailable}</b></div>`;return `<article class="card snapshot-card"><div class="card-head"><div><p class="eyebrow">${copy.frozen}</p><h3>${esc(artifactId(entry))}</h3></div><span>SNAPSHOT v0.1.0</span></div><p class="frozen-source">${esc(entry.source_file)}</p><dl>${Object.entries(entry.artifact).map(([key,val])=>`<div><dt>${esc(key.replaceAll('_',' '))}</dt><dd>${value(val)}</dd></div>`).join('')}</dl></article>`}
+function selectedEntries(){const primary=byId[stages.find(([key])=>key===stage)[2]];if(stage==='results')return [byId['IR-OEM-LIDAR-001'],byId['LL-OEM-LIDAR-001'],byId['SIR-LIDAR-001'],byId['SLL-LIDAR-001']];if(stage==='closure')return [primary,byId['SCLOSE-LIDAR-001']];if(stage==='rga')return [primary,byId['SMATCH-LIDAR-001']];return [primary]}
+function render(){renderChain();const entries=selectedEntries();$('#page-eyebrow').textContent=copy.workspace;$('#page-title').textContent=copy.investigation;$('#page-subtitle').textContent=`REF-PUDU-LIDAR-001 · LiDAR Case 1 · ${copy.declaration}`;$('#role-boundary').innerHTML=view==='oem'?`<b>${copy.oem}</b><span>${copy.oemText}</span>`:`<b>${copy.fae}</b><span>${copy.faeText}</span>`;$('#page-content').innerHTML=`<div class="section-title"><div><p class="eyebrow">${copy.selected} · ${stages.find(([key])=>key===stage)[1]}</p><h2>${copy.select}</h2></div><span class="status">${entries.length} / 14</span></div><div class="${entries.length>1?'two':''}">${entries.map(artifactCard).join('')}</div>`;document.querySelectorAll('[data-page]').forEach(b=>b.classList.toggle('active',b.dataset.page===page))}
+function renderProvenance(){const fields=manifest.sanitization.fields.map(field=>`<span>${esc(field)}</span>`).join('');$('#provenance-content').innerHTML=`<dl class="provenance-grid"><div><dt>${copy.version}</dt><dd>${esc(manifest.baseline_version)}</dd></div><div><dt>${copy.sourceDirectory}</dt><dd>${esc(manifest.source_directory)}</dd></div><div><dt>${copy.sourceCommit}</dt><dd>${esc(manifest.source_commit)}</dd></div><div><dt>${copy.hash}</dt><dd>${esc(manifest.ui_snapshot.sha256)}</dd></div></dl><h3>${copy.sanitization}</h3><p>${esc(manifest.sanitization.immutable_identifier_note)}</p><div class="tokens">${fields}</div><h3>${copy.artifacts}</h3><div class="artifact-registry">${manifest.source_artifacts.map(item=>`<div><code>${esc(item.path)}</code><span title="SHA-256 ${esc(item.sha256)}">SHA-256 ✓</span></div>`).join('')}</div>`}
+setStaticCopy();renderCase();renderProvenance();
+document.querySelectorAll('[data-page]').forEach(button=>button.onclick=()=>{page=button.dataset.page;stage=({datasets:'dataset',ep:'ep',investigations:'ref',rga:'rga',egp:'egp',vault:'vault'}[page]||stage);render()});
+document.querySelectorAll('[data-view]').forEach(button=>button.onclick=()=>{view=button.dataset.view;document.querySelectorAll('[data-view]').forEach(item=>item.classList.toggle('active',item===button));render()});
+$('#provenance-button').onclick=()=>$('#provenance-drawer').showModal();$('#provenance-close').onclick=()=>$('#provenance-drawer').close();
+const prompts=locale==='zh'?['汇总已选工件','解释数据边界','哪些仍需人员授权？']:['Summarize selected artifact','Explain the data boundary','What remains human-authorized?'];$('#suggestions').innerHTML=prompts.map(p=>`<button>${p}</button>`).join('');$('#chat').innerHTML=`<div class="message"><b>${copy.helper}</b><p>${copy.assistNote}</p></div>`;render();

@@ -1,18 +1,35 @@
 <!doctype html>
 <html lang="en">
-<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Atlas v0.1.0 frozen Case 1 LiDAR baseline"><title>Atlas 天枢 · Case 1 LiDAR</title><link rel="stylesheet" href="/styles.css"></head>
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="description" content="Atlas Runtime Governance Infrastructure V3 — frozen sanitized demonstration data">
+  <title>Atlas 天枢 · Runtime Governance Infrastructure</title><link rel="stylesheet" href="/styles.css">
+</head>
 <body>
   <header class="topbar">
     <a class="brand" href="/en/" aria-label="SensorDeck and Atlas 天枢"><img src="/assets/sensordeck-logo.png" alt="SensorDeck"><span class="brand-divider"></span><img src="/assets/atlas-logo.png" alt="Atlas 天枢"></a>
-    <nav class="global-nav" aria-label="Atlas demo navigation"><a href="#artifacts">Artifacts</a><a href="#source">Manifest</a><a href="#sanitization">Sanitization</a></nav>
-    <div class="header-actions"><nav class="language-switcher" aria-label="Language"><a data-locale="en" href="/en/">English</a><span>|</span><a data-locale="zh" href="/zh/">中文</a></nav><a id="back-link" class="official-link" href="https://www.sensordeck.ai/atlas-demo">Back to official demo page</a></div>
+    <nav id="global-nav" class="global-nav" aria-label="Global navigation">
+      <button data-page="overview" class="active">Runtime Overview</button><button data-page="datasets">Datasets</button><button data-page="ep">Evidence Packs</button><button data-page="investigations">Investigations</button><button data-page="rga">Historical RGA</button><button data-page="egp">Sensor Engagement</button><button data-page="vault">Assist Vault</button><button data-page="cto">CTO Dashboard</button>
+    </nav>
+    <div class="header-actions"><nav class="language-switcher" aria-label="Language"><a data-locale="en" href="/en/">English</a><span>|</span><a data-locale="zh" href="/zh/">中文</a></nav><button id="provenance-button" class="official-link">Provenance</button><a id="back-link" class="official-link" href="https://www.sensordeck.ai/atlas-demo">Back to official demo page</a></div>
   </header>
-  <div class="boundary"><strong id="declaration"></strong></div>
+  <div class="boundary"><strong id="declaration">Atlas v0.1.0 frozen baseline · sanitized static demo · not live data</strong><span class="boundary-rule">No Jetson/NUC · no CLI · no backend · human-governed investigation</span></div>
   <main>
-    <section class="hero"><p class="eyebrow">ATLAS · CASE 1 · LIDAR</p><h1 id="page-title"></h1><p id="page-subtitle"></p><div id="scope-copy" class="scope-card"></div></section>
-    <section id="source" class="manifest card"><div class="card-head"><h2 id="source-heading"></h2><span>v0.1.0 · FROZEN</span></div><dl id="manifest-metadata"></dl></section>
-    <section id="sanitization" class="manifest card"><div class="card-head"><h2 id="sanitization-heading"></h2><span>SANITIZED</span></div><div id="sanitization-copy"></div></section>
-    <section id="artifacts" class="artifact-section"><div class="section-title"><div><p class="eyebrow">COMMITTED FROZEN BASELINE</p><h2 id="artifact-heading"></h2></div><p id="artifact-help"></p></div><div class="artifact-workspace"><nav id="artifact-list" class="artifact-list" aria-label="Frozen artifacts"></nav><article id="artifact-detail" class="artifact-detail card"></article></div></section>
+    <aside class="queue" data-layout-column="queue">
+      <div class="panel-title"><div><p class="eyebrow">REF INVESTIGATION QUEUE</p><h2>Runtime signals</h2></div><span class="count">1 FROZEN</span></div>
+      <label class="search"><span>⌕</span><input id="case-search" type="search" placeholder="Search REF investigations" aria-label="Search investigations"></label>
+      <div id="case-list" class="case-list"></div>
+      <div class="scope-card"><span>GOVERNANCE BOUNDARY</span><strong>Recall proposes candidates only</strong><p>Human reviewers own findings, response, Closure, and authorization.</p></div>
+    </aside>
+    <section class="workspace" data-layout-column="workspace">
+      <div class="workspace-head"><div><p class="eyebrow" id="page-eyebrow">ATLAS INVESTIGATION WORKSPACE</p><h1 id="page-title">Runtime investigation</h1><p id="page-subtitle"></p></div><div class="head-controls"><div class="view-switcher" aria-label="Data boundary"><button data-view="oem" class="active">OEM View</button><button data-view="fae">Sensor FAE View</button></div><span id="case-status" class="status">FROZEN</span></div></div>
+      <div id="role-boundary" class="role-boundary"></div>
+      <div id="investigation-chain" class="artifact-chain" aria-label="Investigation lifecycle"></div>
+      <div id="page-content" class="page-content"></div>
+      <footer><b>Atlas safeguards active</b><span>Human review required</span><span>root_cause_inferred=false</span><span>Authorized IR/LL only</span></footer>
+    </section>
+    <aside class="assistant-rail" data-layout-column="assist"><div class="assistant-head"><span class="spark">✦</span><div><p class="eyebrow">ATLAS ASSIST</p><h2>Artifact helper</h2></div><i>LOCAL</i></div><div class="assistant-note"><b>DRAFT · SUPPORTING ROLE</b><p>Summarizes selected frozen artifacts. It cannot determine cause or take governance actions.</p></div><div id="chat" class="chat"></div><div id="suggestions" class="suggestions"></div></aside>
   </main>
+  <dialog id="provenance-drawer"><div class="drawer-head"><div><p class="eyebrow">DATA SOURCE / PROVENANCE</p><h2 id="provenance-title">Source & integrity</h2></div><button id="provenance-close" aria-label="Close">×</button></div><div id="provenance-content"></div></dialog>
   <script type="module" src="/app.js"></script>
 </body></html>
