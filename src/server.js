@@ -18,7 +18,9 @@ const server = http.createServer(async (req, res) => {
     if (req.method === "POST" && req.url === "/api/run") { const result = await runner.run(); lastRun = result; if (result.artifact) artifact = result.artifact; return json(res, 200, { ...result, artifact: artifact && parseArtifact(artifact) }); }
     if (req.method === "POST" && req.url === "/api/artifact") { artifact = (await body(req)).artifact; const parsed = parseArtifact(artifact); lastRun = { status: "RECORDED", exitCode: null, durationMs: null, stdout: "Loaded user-supplied artifact", stderr: "" }; return json(res, 200, parsed); }
     if (req.method === "POST" && req.url === "/api/copilot") { const { action } = await body(req); if (!artifact) return json(res, 409, { error: "Load a real artifact first" }); return json(res, 200, { answer: answerCopilot(action, parseArtifact(artifact), lastRun) }); }
-    const path = req.url === "/" ? "index.html" : normalize(req.url).replace(/^(\.\.[/\\])+/, "").slice(1);
+    const pathname = new URL(req.url, "http://localhost").pathname;
+    const localizedHome = pathname === "/en/" || pathname === "/zh/";
+    const path = pathname === "/" || localizedHome ? "index.html" : normalize(pathname).replace(/^(\.\.[/\\])+/, "").slice(1);
     const data = await readFile(join(root, path)); const types = { ".html":"text/html", ".css":"text/css", ".js":"text/javascript" }; res.writeHead(200, { "content-type": types[extname(path)] ?? "application/octet-stream" }); res.end(data);
   } catch (e) { json(res, e.code === "ALREADY_RUNNING" ? 409 : 400, { error: e.message }); }
 });
