@@ -19,7 +19,7 @@ const isBusinessSentence=value=>/[A-Za-z]/.test(value)&&/[.!]$/.test(value);
  test('all 14 artifacts localize every nested label, enum, array, summary, and boundary',()=>{
   assert.equal(snapshot.artifacts.length,14);
   for(const {artifact,source_file} of snapshot.artifacts)assert.doesNotThrow(()=>localizeArtifact(artifact),source_file);
-  assert.equal(Object.keys(FIELD_ZH).length,96);
+  assert.equal(Object.keys(FIELD_ZH).length,103);
   assert.equal(Object.keys(VALUE_ZH).filter(isBusinessSentence).length,106);
   assert.equal(Object.keys(VALUE_ZH).length-106,51);
  });
