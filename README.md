@@ -70,3 +70,7 @@ Tests cover conservative parsing/missing fields, deterministic Copilot guardrail
 The V3 architecture preview separates demo records into `dataset`, `ep`, `ref`, `rga`, `context`, `tier`, `egp`, `sensor_ir`, `sensor_ll`, `oem_response`, `closure`, and `assist_candidate` artifacts. Repository inspection found no authoritative public schemas for those artifacts, including no verified official nine-field EGP contract. Consequently, every value in those modules is labeled illustrative/demo-only and must not be treated as a schema assertion. The EGP module explicitly displays **EGP field contract pending schema verification** rather than fabricating an official contract.
 
 The only fields verified against existing repository code are the V1 artifact adapter fields documented above: `observed_topics`, topic eligibility/classification, `timing_relationships`, governance/evidence windows, and `classification_state`. These V1 adapter fields are not represented as official schemas for the V3 product artifacts.
+
+## Bilingual brand experience
+
+The static V3 experience is available at `/en/` and `/zh/`; the root deployment redirects to English. Both routes use the SensorDeck and Atlas 天枢 final brand lockup, expose the same sanitized cases and interactions, and retain the full governed lifecycle from Runtime Dataset through Assist Vault. Use the `English | 中文` control in the header to switch versions.
