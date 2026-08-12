@@ -1,6 +1,6 @@
-# Atlas Shared Investigation Workspace V2
+# Atlas Runtime Governance Infrastructure V3
 
-Private, standalone, read-only workspace around the **public Atlas DSIL SDK surface**. V2 incrementally upgrades the original preview with OEM, Sensor Partner, and Shared Evidence views; a professional three-column investigation layout; and three explicitly sanitized demo cases. This repository does not contain, modify, or reimplement the Atlas Investigation Engine. It does not write to Assist Vault or Closure.
+Private, standalone, read-only workspace around the **public Atlas DSIL SDK surface**. V3 presents the governed Atlas investigation lifecycle for OEM and Sensor FAE users, with role-specific data boundaries, a professional three-column engineering workspace, and three explicitly sanitized robot runtime cases. This repository does not contain, modify, or reimplement the Atlas Investigation Engine. It does not write to Assist Vault or Closure.
 
 ## Current SDK verification status
 
@@ -65,8 +65,8 @@ Tests cover conservative parsing/missing fields, deterministic Copilot guardrail
 - The UI is read-only evidence presentation. PASS means only that the configured public baseline process exited successfully.
 - Never load unsanitized private artifacts into a shared deployment.
 
-## V2 artifact schema status
+## V3 artifact model status
 
-The V2 architecture preview separates demo records into `dataset`, `ep`, `ref`, `rga`, `context`, `tier`, `egp`, `sensor_ir`, `sensor_ll`, `oem_response`, `closure`, and `assist_candidate` artifacts. Repository inspection found no authoritative public schemas for those artifacts, including no verified official nine-field EGP contract. Consequently, every value in those modules is labeled illustrative/demo-only and must not be treated as a schema assertion. The EGP module explicitly displays **EGP field contract pending schema verification** rather than fabricating an official contract.
+The V3 architecture preview separates demo records into `dataset`, `ep`, `ref`, `rga`, `context`, `tier`, `egp`, `sensor_ir`, `sensor_ll`, `oem_response`, `closure`, and `assist_candidate` artifacts. Repository inspection found no authoritative public schemas for those artifacts, including no verified official nine-field EGP contract. Consequently, every value in those modules is labeled illustrative/demo-only and must not be treated as a schema assertion. The EGP module explicitly displays **EGP field contract pending schema verification** rather than fabricating an official contract.
 
-The only fields verified against existing repository code are the V1 artifact adapter fields documented above: `observed_topics`, topic eligibility/classification, `timing_relationships`, governance/evidence windows, and `classification_state`. These V1 adapter fields are not represented as official schemas for the V2 product artifacts.
+The only fields verified against existing repository code are the V1 artifact adapter fields documented above: `observed_topics`, topic eligibility/classification, `timing_relationships`, governance/evidence windows, and `classification_state`. These V1 adapter fields are not represented as official schemas for the V3 product artifacts.
