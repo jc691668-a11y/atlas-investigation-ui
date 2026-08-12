@@ -1,18 +1,4 @@
-import test from "node:test";
-import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
-
-test("static preview clearly disclaims demo data and disables runner", async () => {
-  const html = await readFile("public/index.html", "utf8");
-  assert.match(html, /Preview Mode/);
-  assert.match(html, /UI DEMO DATA — NOT A REAL BASELINE RESULT/);
-  assert.match(html, /Local Atlas Runner not connected/);
-  assert.match(html, /id="run" disabled/);
-  assert.doesNotMatch(html, />PASS</);
-});
-
-test("Vercel publishes the static build output", async () => {
-  const config = JSON.parse(await readFile("vercel.json", "utf8"));
-  assert.equal(config.buildCommand, "npm run build");
-  assert.equal(config.outputDirectory, "dist");
-});
+import test from "node:test";import assert from "node:assert/strict";import { readFile } from "node:fs/promises";
+test("V2 exposes role switcher and complete architecture tabs",async()=>{const html=await readFile("public/index.html","utf8");for(const label of ["OEM View","Sensor Partner View","Shared Evidence View","Overview","Dataset","Evidence Pack","REF","RGA Recall","Context &amp; Tier","EGP","IR / LL","Closure","Raw Details"])assert.match(html,new RegExp(label));assert.match(html,/investigation-chain/);});
+test("persistent chain and Copilot cover Atlas modules and safeguards",async()=>{const app=await readFile("public/app.js","utf8");for(const term of ["Runtime Dataset","Evidence Pack","REF Ticket","Historical RGA Recall","Investigation Context","Tier Candidate","Evidence Guidance Pack","Sensor IR + LL + OEM Response","OEM Closure","Assist Candidate / Vault"])assert.match(app,new RegExp(term.replace(/[+]/g,"\\+")));for(const prompt of ["Summarize the Dataset and EP","Explain the REF trigger","Explain the RGA recall","Why this Tier Candidate?","Summarize the EGP","What is missing from Sensor IR?","Draft an OEM/Sensor follow-up","Is this case ready for Closure?"])assert.match(app,new RegExp(prompt.replace(/[?]/g,"\\?")));assert.match(app,/cannot confirm root cause/);assert.match(app,/perform a Vault write/);});
+test("Vercel publishes static build output",async()=>{const c=JSON.parse(await readFile("vercel.json","utf8"));assert.equal(c.buildCommand,"npm run build");assert.equal(c.outputDirectory,"dist");});

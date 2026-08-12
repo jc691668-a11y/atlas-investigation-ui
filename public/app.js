@@ -1,56 +1,30 @@
-const demoArtifact = Object.freeze({
-  demo_notice: "UI DEMO DATA — NOT A REAL BASELINE RESULT",
-  observed_topics: ["/demo/camera", "/demo/imu", "/demo/odometry"],
-  topic_eligibility: {
-    "/demo/camera": "illustrative eligible",
-    "/demo/imu": "illustrative eligible",
-    "/demo/odometry": "illustrative review"
-  },
-  timing_relationships: [
-    { source: "/demo/camera", target: "/demo/imu", relationship: "illustrative alignment", offset_ms: 12 },
-    { source: "/demo/imu", target: "/demo/odometry", relationship: "illustrative sequence", offset_ms: 4 }
-  ],
-  governance_evidence_windows: [{ label: "demo-window-01", start: "T+00:00", end: "T+00:30", status: "illustrative" }],
-  classification_state: "DEMO — NOT EVALUATED"
-});
-
-const parsedDemo = {
-  observedTopics: demoArtifact.observed_topics,
-  topicClassification: demoArtifact.topic_eligibility,
-  timingRelationships: demoArtifact.timing_relationships,
-  evidenceWindows: demoArtifact.governance_evidence_windows,
-  classificationState: demoArtifact.classification_state,
-  raw: demoArtifact
-};
-
-const fields = [
-  ["Observed topics", "observedTopics"],
-  ["Topic eligibility / classification", "topicClassification"],
-  ["Timing relationships", "timingRelationships"],
-  ["Governance / evidence windows", "evidenceWindows"],
-  ["Classification state", "classificationState"]
-];
-
-const answers = {
-  summarize: "The demo presents 3 illustrative topics, 3 illustrative classifications, and 2 illustrative timing relationships. This is a UI walkthrough, not a completed validation.",
-  evidence: "The displayed demo window and topic labels exist only to demonstrate evidence presentation. They are not produced by Atlas and must not be used for an investigation decision.",
-  timing: "Two illustrative timing rows demonstrate the intended layout. No real timestamps were analyzed and no causal interpretation is available.",
-  missing: "A real Atlas artifact, CLI execution log, exit code, verified evidence windows, and baseline classification are all intentionally absent from this preview.",
-  next: "Connect the reviewed Local Atlas Runner in an approved environment, execute the documented public SDK baseline, then replace demo values with the resulting sanitized artifact."
-};
-
-const escapeHtml = (value) => String(value).replace(/[&<>]/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[character]);
-const fieldsElement = document.querySelector("#fields");
-fieldsElement.innerHTML = fields.map(([title, key]) => `<section class="field"><h3>${title}<span>DEMO</span></h3><pre>${escapeHtml(JSON.stringify(parsedDemo[key], null, 2))}</pre></section>`).join("");
-document.querySelector("#raw pre").textContent = JSON.stringify(parsedDemo.raw, null, 2);
-
-document.querySelectorAll("[data-action]").forEach((button) => {
-  button.addEventListener("click", () => {
-    const answer = answers[button.dataset.action];
-    const bubble = document.createElement("div");
-    bubble.className = "bubble";
-    bubble.textContent = `DRAFT / AI-assisted — UI DEMO DATA ONLY. ${answer} This response does not confirm root cause.`;
-    document.querySelector("#chat").append(bubble);
-    bubble.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  });
-});
+import { demoCases } from "./demo-data.js";
+let selected=demoCases[0], tab="overview", view="oem";
+const $=s=>document.querySelector(s); const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
+const labels={dataset:"Runtime Dataset",ep:"Evidence Pack",ref:"REF Ticket",rga:"Historical RGA Recall",context:"Investigation Context",tier:"Tier Candidate",egp:"Evidence Guidance Pack",responses:"Sensor IR + LL + OEM Response",closure:"OEM Closure",assist:"Assist Candidate / Vault"};
+const chain=()=>[
+ ["dataset",selected.dataset.dataset_id,"Available","OEM"],["ep",selected.ep.ep_id,selected.ep.artifact_status,"Atlas"],["ref",selected.ref.ref_id,"Available","Shared"],["rga",selected.rga.matched_historical_rga_id,"Available","Atlas"],["context","CTX-"+selected.id.slice(4),"Available","Shared"],["context",selected.tier.candidate,"Draft","Atlas"],["egp",selected.egp.egp_id,selected.egp.status,"Shared"],["responses",selected.sensor_ir.artifact_id,"Pending","Sensor Partner"],["closure",selected.closure.artifact_id,"Not produced","OEM"],["closure",selected.assist_candidate.artifact_id,"Not produced","OEM"]];
+function renderChain(){ $("#investigation-chain").innerHTML=`<div class="chain-label"><b>INVESTIGATION CHAIN</b><span>Same facts · role-prioritized</span></div><div class="chain-flow">${chain().map(([key,id,status,owner],i)=>`<button data-open="${key}"><span>${i+1}. ${labels[key]}</span><b>${esc(id)}</b><small><i class="state ${status.toLowerCase().replaceAll(" ","-")}">${status}</i> · ${owner}</small></button>`).join("")}</div>`; document.querySelectorAll("[data-open]").forEach(b=>b.onclick=()=>{tab=b.dataset.open;render();}); }
+function renderCases(q=""){const list=demoCases.filter(c=>(c.id+c.title+c.partner).toLowerCase().includes(q.toLowerCase()));$("#case-list").innerHTML=list.map(c=>`<button class="case-card ${c===selected?"active":""}" data-case="${c.id}"><span class="case-top"><b>${c.id}</b><i class="dot blue"></i></span><strong>${c.title}</strong><small>${c.partner}</small><span class="case-bottom"><em>${c.status}</em><time>${c.opened.replace(" 2026","")}</time></span></button>`).join("");document.querySelectorAll("[data-case]").forEach(b=>b.onclick=()=>{selected=demoCases.find(c=>c.id===b.dataset.case);tab="overview";render();resetChat();});}
+const section=(eyebrow,title,body)=>`<div class="section-head"><div><p class="eyebrow">${eyebrow}</p><h2>${title}</h2></div><span class="illustrative">ILLUSTRATIVE DEMO VALUES</span></div>${body}`;
+const rows=o=>`<dl class="artifact-fields">${Object.entries(o).map(([k,v])=>`<div><dt>${esc(k)}</dt><dd>${Array.isArray(v)?v.map(x=>`<span class="token">${esc(x)}</span>`).join(""):typeof v==="object"?esc(JSON.stringify(v)):esc(v)}</dd></div>`).join("")}</dl>`;
+const card=(title,obj,extra="")=>`<article class="artifact-card"><h3>${title}</h3>${rows(obj)}${extra}</article>`;
+function timeline(){const points=[[-300,"Pre-event",selected.ep.pre_event],[-120,"Context",selected.context.operational_state],[-30,"Near-event",selected.ep.near_event],[0,"Canonical event / T0",selected.ep.canonical_event_t0],[30,"Post-event",selected.ep.post_event],[120,"Observation","No causal interpretation"],[300,"Boundary","Evidence window ended"]];return `<div class="ep-boundaries">${points.map(([t,l,d])=>`<div class="boundary-point ${t===0?"t0":""}"><b>${t===0?"T0":t>0?`+${t}s`:`${t}s`}</b><span>${l}</span><small>${esc(d)}</small></div>`).join("")}</div>`;}
+function renderTab(){let body;
+ if(tab==="overview")body=section("CASE SUMMARY","Investigation Overview",`<div class="priority"><b>${view==="oem"?"OEM priorities":view==="partner"?"Sensor Partner priorities":"Shared Evidence priorities"}</b><span>${view==="oem"?"Dataset impact → REF → Tier → OEM Response → Closure":view==="partner"?"Evidence Pack → runtime context → EGP → Sensor IR → Sensor LL":"EP references → RGA Recall → EGP exchange → open questions → Claim Boundary"}</span></div><div class="overview-grid">${card("Current artifacts",{dataset_id:selected.dataset.dataset_id,ep_id:selected.ep.ep_id,ref_id:selected.ref.ref_id,tier_candidate:selected.tier.candidate})}${card("Open response",{sensor_ir:selected.sensor_ir.status,sensor_ll:selected.sensor_ll.status,oem_response:selected.oem_response.status,closure:selected.closure.closure_status})}${card("Claim Boundary",{boundary:selected.ep.claim_boundary})}${card("Ownership",{dataset:selected.dataset.data_ownership,investigation:selected.ref.current_investigation_owner,egp:selected.egp.owner})}</div>`);
+ else if(tab==="dataset")body=section("RUNTIME DATASET","Dataset",`<div class="warning">No real dataset was retained. All retention, lock, integrity, and locality values below are sanitized illustrations.</div>${card("Dataset artifact",selected.dataset)}`);
+ else if(tab==="ep")body=section("FIRST-CLASS ARTIFACT","Evidence Pack",`${card("EP identity",{ep_id:selected.ep.ep_id,artifact_status:selected.ep.artifact_status,canonical_event_T0:selected.ep.canonical_event_t0,case_reference:selected.ep.case_reference,generated_timestamp:selected.ep.generated_timestamp,exported_timestamp:selected.ep.exported_timestamp,included_surfaces_signals:selected.ep.included_surfaces_signals})}<h3>Evidence Timeline</h3>${timeline()}<div class="claim-note"><b>Claim Boundary</b><p>${selected.ep.claim_boundary}</p></div><details><summary>Raw EP JSON <span>collapsed by default</span></summary><pre class="raw">${esc(JSON.stringify(selected.ep,null,2))}</pre></details>`);
+ else if(tab==="ref")body=section("ADMISSION ARTIFACT","REF Ticket",card("REF record",selected.ref));
+ else if(tab==="rga")body=section("HISTORICAL RETRIEVAL","Historical RGA Recall",`${card("Recall result",selected.rga)}<div class="claim-note"><b>Explicit boundary</b><p>Historical similarity does not establish root cause.</p></div>`);
+ else if(tab==="context")body=section("INVESTIGATION FRAMING","Context & Tier Candidate",`<div class="split">${card("Investigation Context",selected.context)}${card("Tier Candidate",selected.tier)}</div><div class="claim-note"><b>Candidate only</b><p>Tier is a routing candidate, not a confirmed cause.</p></div>`);
+ else if(tab==="egp")body=section("EVIDENCE GUIDANCE PACK","EGP",`<div class="schema-pending">EGP field contract pending schema verification. Displayed fields are demo-only and are not presented as the official nine-field contract.</div>${card("Structured demo artifact",selected.egp)}`);
+ else if(tab==="responses")body=section("PARALLEL HUMAN RESPONSES","Sensor IR + Sensor LL + OEM Response",`<div class="response-grid">${card("Sensor IR",selected.sensor_ir)}${card("Sensor LL",selected.sensor_ll)}${card("OEM Response",selected.oem_response)}</div>`);
+ else if(tab==="closure")body=section("HUMAN AUTHORITY","Closure & Assist Candidate",`<div class="split">${card("Closure Gate",selected.closure,`<button disabled class="disabled-action">Close case</button><small class="required">Human confirmation required</small>`)}${card("Assist Candidate",selected.assist_candidate,`<button disabled class="disabled-action">Write to Assist Vault</button><small class="required">Human confirmation required · no Vault write completed</small>`)}</div>`);
+ else body=section("SANITIZED DEMO RECORD","Raw Details",`<pre class="raw">${esc(JSON.stringify(selected,null,2))}</pre>`);
+ $("#tab-content").innerHTML=body;}
+function render(){renderCases($("#case-search").value);Object.entries({"#crumb-id":selected.id,"#case-title":selected.title,"#case-subtitle":selected.subtitle,"#case-status":selected.status,"#meta-id":selected.id,"#meta-asset":selected.asset,"#meta-opened":selected.opened,"#meta-partner":selected.partner,"#meta-visibility":selected.visibility}).forEach(([s,v])=>$(s).textContent=v);document.querySelectorAll("[data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));renderChain();renderTab();}
+const prompts=["Summarize the Dataset and EP","Explain the REF trigger","Explain the RGA recall","Why this Tier Candidate?","Summarize the EGP","What is missing from Sensor IR?","Draft an OEM/Sensor follow-up","Is this case ready for Closure?"];
+function answer(q){const l=q.toLowerCase(),d=selected;if(l.includes("dataset"))return `${d.dataset.dataset_id} is an illustrative ${d.dataset.rolling_buffer_hours}h circular buffer; ${d.ep.ep_id} is ${d.ep.artifact_status} with T0 ${d.ep.canonical_event_t0}.`;if(l.includes("ref trigger"))return `${d.ref.ref_id} records canonical_trigger=${d.ref.canonical_trigger}, referencing ${d.dataset.dataset_id} and ${d.ep.ep_id}.`;if(l.includes("rga"))return `${d.rga.matched_historical_rga_id} returned match_strength=${d.rga.match_strength} from ${d.rga.retrieval_source}; historical similarity is not causation.`;if(l.includes("tier"))return `${d.tier.candidate} is supported by ${d.tier.supporting_evidence.join(", ")}; missing_evidence=${d.tier.missing_evidence.join(", ")}. Candidate only.`;if(l.includes("egp"))return `${d.egp.egp_id} is ${d.egp.status}, owner=${d.egp.owner}, requesting ${d.egp.evidence_requested.join(", ")}; its official field contract remains unverified.`;if(l.includes("sensor ir"))return `${d.sensor_ir.artifact_id} status=${d.sensor_ir.status}; limitations=${d.sensor_ir.limitations.join(", ")} and next_requested_evidence=${d.sensor_ir.next_requested_evidence.join(", ")}.`;if(l.includes("follow"))return `Draft follow-up for ${d.ref.ref_id}: please address ${d.egp.shared_questions.join("; ")} and cite ${d.ep.ep_id}.`;return `${d.closure.artifact_id} status=${d.closure.closure_status}; unresolved_questions=${d.closure.unresolved_questions.join(", ")}, root_cause_inferred=${d.closure.root_cause_inferred}. I cannot confirm root cause, close the case, or write ${d.assist_candidate.artifact_id} to Vault.`;}
+function add(text,who="assistant"){const e=document.createElement("div");e.className=`message ${who}`;e.innerHTML=who==="assistant"?`<span>✦ Atlas Copilot</span><p><b>DRAFT / AI-assisted.</b> ${esc(text)} This response cannot confirm root cause, authorize automatic Closure, or perform a Vault write.</p>`:`<p>${esc(text)}</p>`;$("#chat").append(e);$("#chat").scrollTop=$("#chat").scrollHeight;}
+function ask(q){add(q,"user");add(answer(q));} function resetChat(){$("#chat").innerHTML="";add(`${selected.ref.ref_id} is ready. Answers cite selected demo artifact IDs and fields.`);$("#suggestions").innerHTML=prompts.map(p=>`<button>${p}</button>`).join("");document.querySelectorAll("#suggestions button").forEach(b=>b.onclick=()=>ask(b.textContent));}
+document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>{view=b.dataset.view;document.querySelectorAll("[data-view]").forEach(x=>x.classList.toggle("active",x===b));render();});document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render();});$("#case-search").oninput=e=>renderCases(e.target.value);$("#chat-form").onsubmit=e=>{e.preventDefault();const q=$("#chat-input").value.trim();if(q){ask(q);$("#chat-input").value="";}};render();resetChat();
