@@ -19,7 +19,7 @@
       <div class="panel-title"><div><p class="eyebrow">REF INVESTIGATION QUEUE</p><h2>Runtime signals</h2></div><span class="count">1 FROZEN</span></div>
       <label class="search"><span>⌕</span><input id="case-search" type="search" placeholder="Search REF investigations" aria-label="Search investigations"></label>
       <div id="case-list" class="case-list"></div>
-      <div class="scope-card"><span>GOVERNANCE BOUNDARY</span><strong>Recall proposes candidates only</strong><p>Human reviewers own findings, response, Closure, and authorization.</p></div>
+      <div class="scope-card"><span>GOVERNANCE BOUNDARY</span><strong>Historical cases are references only</strong><p>Atlas may recommend similar cases and prior lessons, but it does not determine root cause or responsibility. Findings, external responses, case closure, and knowledge-base admission require confirmation by authorized personnel.</p></div>
     </aside>
     <section class="workspace" data-layout-column="workspace">
       <div class="workspace-head"><div><p class="eyebrow" id="page-eyebrow">ATLAS INVESTIGATION WORKSPACE</p><h1 id="page-title">Runtime investigation</h1><p id="page-subtitle"></p></div><div class="head-controls"><div class="view-switcher" aria-label="Data boundary"><button data-view="oem" class="active">OEM View</button><button data-view="fae">Sensor FAE View</button></div><span id="case-status" class="status">FROZEN</span></div></div>
@@ -28,7 +28,7 @@
       <div id="page-content" class="page-content"></div>
       <footer><b>Atlas safeguards active</b><span>Human review required</span><span>root_cause_inferred=false</span><span>Authorized IR/LL only</span></footer>
     </section>
-    <aside class="assistant-rail" data-layout-column="assist"><div class="assistant-head"><span class="spark">✦</span><div><p class="eyebrow">ATLAS ASSIST</p><h2>Artifact helper</h2></div><i>LOCAL</i></div><div class="assistant-note"><b>DRAFT · SUPPORTING ROLE</b><p>Summarizes selected frozen artifacts. It cannot determine cause or take governance actions.</p></div><div id="chat" class="chat"></div><div id="suggestions" class="suggestions"></div></aside>
+    <aside class="assistant-rail" data-layout-column="assist"><div class="assistant-head"><span class="spark">✦</span><div><p class="eyebrow">ATLAS INVESTIGATION ASSIST</p><h2>Atlas Investigation Assistant</h2></div><i>LOCAL</i></div><div class="assistant-note"><b>REVIEW SUPPORT · READ ONLY</b><p>Explains the selected frozen snapshot, artifact fields, and investigation flow. Its answers support review only; it cannot infer root cause, modify artifacts, approve findings, or perform governance actions.</p></div><div id="chat" class="chat"></div><div id="suggestions" class="suggestions"></div></aside>
   </main>
   <dialog id="provenance-drawer"><div class="drawer-head"><div><p class="eyebrow">DATA SOURCE / PROVENANCE</p><h2 id="provenance-title">Source & integrity</h2></div><button id="provenance-close" aria-label="Close">×</button></div><div id="provenance-content"></div></dialog>
   <script type="module" src="/app.js"></script>
