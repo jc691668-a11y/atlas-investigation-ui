@@ -1,30 +1,18 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <meta name="description" content="Atlas Runtime Governance Infrastructure V3 — sanitized demonstration data">
-  <title>Atlas 天枢 · Runtime Governance Infrastructure</title><link rel="stylesheet" href="/styles.css">
-</head>
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="description" content="Atlas v0.1.0 frozen Case 1 LiDAR baseline"><title>Atlas 天枢 · Case 1 LiDAR</title><link rel="stylesheet" href="/styles.css"></head>
 <body>
   <header class="topbar">
-    <a class="brand" href="#" aria-label="SensorDeck and Atlas 天枢"><img src="/assets/sensordeck-logo.png" alt="SensorDeck"><span class="brand-divider"></span><img src="/assets/atlas-logo.png" alt="Atlas 天枢"></a>
-    <nav id="role-links" class="global-nav" aria-label="Demo roles"></nav>
-    <div class="header-actions"><span class="demo-pill">STATIC SNAPSHOT · 静态快照</span></div>
+    <a class="brand" href="/en/" aria-label="SensorDeck and Atlas 天枢"><img src="/assets/sensordeck-logo.png" alt="SensorDeck"><span class="brand-divider"></span><img src="/assets/atlas-logo.png" alt="Atlas 天枢"></a>
+    <nav class="global-nav" aria-label="Atlas demo navigation"><a href="#artifacts">Artifacts</a><a href="#source">Manifest</a><a href="#sanitization">Sanitization</a></nav>
+    <div class="header-actions"><nav class="language-switcher" aria-label="Language"><a data-locale="en" href="/en/">English</a><span>|</span><a data-locale="zh" href="/zh/">中文</a></nav><a id="back-link" class="official-link" href="https://www.sensordeck.ai/atlas-demo">Back to official demo page</a></div>
   </header>
-  <div class="boundary"><strong>SANITIZED DEMO DATA · GENERATED FROM ATLAS BASELINE REFERENCE INPUT</strong><span>已脱敏演示数据 · 基于 Atlas Baseline 参考输入生成</span><span class="boundary-rule">root_cause_inferred=false · no automatic responsibility assignment · no automatic Closure · no automatic Assist Vault write · IR and LL require human authorization</span></div>
+  <div class="boundary"><strong id="declaration"></strong></div>
   <main>
-    <aside class="queue">
-      <div class="panel-title"><div><p class="eyebrow">REF INVESTIGATION QUEUE</p><h2>Runtime signals</h2></div><span class="count">1 SNAPSHOT</span></div>
-
-      <div id="case-list" class="case-list"></div>
-      <div class="scope-card"><span>GOVERNANCE BOUNDARY</span><strong>Static presentation only</strong><p>No ATLAS_CLI, Jetson/NUC, API, live execution, connectivity, or health status.</p></div>
-    </aside>
-    <section class="workspace">
-      <div class="workspace-head"><div><p class="eyebrow" id="page-eyebrow">ATLAS INVESTIGATION WORKSPACE</p><h1 id="page-title">Runtime investigation</h1><p id="page-subtitle"></p></div><div class="head-controls"><div class="view-switcher" aria-label="Data boundary"><button data-view="oem" class="active">OEM View</button><button data-view="fae">Sensor FAE View</button></div><span id="case-status" class="status"></span></div></div>
-      <div id="role-boundary" class="role-boundary"></div>
-      <div id="investigation-chain" class="artifact-chain" aria-label="Investigation lifecycle"></div>
-      <div id="page-content" class="page-content"></div>
-      <footer><b>Atlas safeguards active</b><span>Human review required</span><span>root_cause_inferred=false</span><span>Authorized IR/LL only</span></footer>
-    </section>
-  </main><script type="module" src="/app.js"></script>
+    <section class="hero"><p class="eyebrow">ATLAS · CASE 1 · LIDAR</p><h1 id="page-title"></h1><p id="page-subtitle"></p><div id="scope-copy" class="scope-card"></div></section>
+    <section id="source" class="manifest card"><div class="card-head"><h2 id="source-heading"></h2><span>v0.1.0 · FROZEN</span></div><dl id="manifest-metadata"></dl></section>
+    <section id="sanitization" class="manifest card"><div class="card-head"><h2 id="sanitization-heading"></h2><span>SANITIZED</span></div><div id="sanitization-copy"></div></section>
+    <section id="artifacts" class="artifact-section"><div class="section-title"><div><p class="eyebrow">COMMITTED FROZEN BASELINE</p><h2 id="artifact-heading"></h2></div><p id="artifact-help"></p></div><div class="artifact-workspace"><nav id="artifact-list" class="artifact-list" aria-label="Frozen artifacts"></nav><article id="artifact-detail" class="artifact-detail card"></article></div></section>
+  </main>
+  <script type="module" src="/app.js"></script>
 </body></html>

@@ -1,13 +1,45 @@
-const snapshot=await fetch('/demo-snapshot.json').then(r=>{if(!r.ok)throw new Error('Static snapshot unavailable');return r.json()});
-const $=s=>document.querySelector(s);const esc=v=>String(v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-const roles={tier1:{label:'Tier 1',focus:['runtime_dataset','evidence_pack','ref_ticket','historical_rga_match']},investigation:{label:'Investigation',focus:Object.keys(snapshot.artifacts)},'sensor-fae':{label:'Sensor FAE',focus:['sensor_engagement_pack','sensor_ir','sensor_ll','oem_response','sensor_oem_closure_status']},cto:{label:'CTO',focus:['ref_ticket','investigation_tier_candidate','sensor_oem_closure_status','assist_candidate']}};
-const role=location.pathname.split('/').filter(Boolean).at(-1);const current=roles[role]||roles.investigation;const a=snapshot.artifacts;
-const stages=[['runtime_dataset','Runtime Dataset / Agent observation','运行时数据集 / Agent 观测'],['evidence_pack','Evidence Pack (EP)','证据包 (EP)'],['ref_ticket','REF Ticket','REF 工单'],['historical_rga_match','Historical RGA match','历史 RGA 匹配'],['investigation_context','Investigation Context','调查上下文'],['investigation_tier_candidate','Investigation Tier Candidate','调查层级候选'],['sensor_engagement_pack','Sensor Engagement Pack (EGP)','传感器协作包 (EGP)'],['sensor_ir','Sensor IR','传感器 IR'],['sensor_ll','Sensor LL','传感器 LL'],['oem_response','OEM Response','OEM 响应'],['sensor_oem_closure_status','Sensor/OEM Closure status','传感器/OEM 结案状态'],['assist_candidate','Assist Candidate / Vault','Assist 候选 / 知识库']];
-let selected=current.focus[0];
-const value=v=>Array.isArray(v)?`<div class="tokens">${v.map(x=>`<span>${esc(x)}</span>`).join('')}</div>`:v&&typeof v==='object'?`<pre>${esc(JSON.stringify(v,null,2))}</pre>`:esc(v);
-function card(key){const [_,en,zh]=stages.find(x=>x[0]===key);return `<article class="card"><div class="card-head"><h3>${en}<small>${zh}</small></h3><span>SANITIZED DEMO DATA</span></div><dl>${Object.entries(a[key]).map(([k,v])=>`<div><dt>${esc(k.replaceAll('_',' '))}</dt><dd>${value(v)}</dd></div>`).join('')}</dl></article>`}
-function render(){const item=a[selected];$('#page-eyebrow').textContent=`${current.label.toUpperCase()} DEMO VIEW`;$('#page-title').textContent=stages.find(x=>x[0]===selected)[1];$('#page-subtitle').textContent=`${snapshot.snapshot_metadata.case_id} · ${item.artifact_id}`;$('#case-status').textContent=item.status;$('#investigation-chain').innerHTML=`<div class="chain-title"><b>OFFICIAL LIFECYCLE · 官方生命周期</b><span>one immutable static snapshot · 单一不可变静态快照</span></div><div class="chain-flow">${stages.map(([k,en],i)=>`<button data-stage="${k}" class="${k===selected?'active':''}"><i>${String(i+1).padStart(2,'0')}</i><b>${en}</b><small>${a[k].status}</small></button>`).join('<i class="arrow">→</i>')}</div>`;document.querySelectorAll('[data-stage]').forEach(b=>b.onclick=()=>{selected=b.dataset.stage;render()});$('#page-content').innerHTML=card(selected);}
-$('#role-links').innerHTML=Object.entries(roles).map(([path,r])=>`<a class="${path===role?'active':''}" href="/demo/${path}">${r.label}</a>`).join('');
-$('#case-list').innerHTML=`<button class="case-card active"><span><b>${a.ref_ticket.artifact_id}</b><i>DEMO</i></span><strong>LiDAR canary baseline snapshot</strong><small>${snapshot.snapshot_metadata.identity.robot}</small><em>${snapshot.snapshot_metadata.case_id}</em></button>`;
-$('#role-boundary').innerHTML=`<b>${current.label} READ-ONLY ROLE VIEW</b><span>No actions, device connectivity, health status, API, or background execution · 无操作、设备连接、健康状态、API 或后台执行</span>`;
+const DATA_ROOT='/data/lidar_case1_frozen_v0.1.0';
+const [snapshot,manifest]=await Promise.all([
+  fetch(`${DATA_ROOT}/ui_snapshot.json`).then(readJson),
+  fetch(`${DATA_ROOT}/manifest.json`).then(readJson)
+]);
+
+function readJson(response){if(!response.ok)throw new Error(`Frozen data unavailable (${response.status})`);return response.json()}
+const $=selector=>document.querySelector(selector);
+const esc=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+const locale=location.pathname.startsWith('/zh')?'zh':'en';
+const copy={
+  en:{declaration:'Atlas v0.1.0 frozen baseline · sanitized static demo · not live data',title:'Case 1 LiDAR artifacts',subtitle:'14 committed and verified frozen artifacts — not an 18-file run_demo.sh rerun',artifacts:'Frozen artifacts',source:'Source & integrity',sanitization:'Sanitization',sourceLabel:'Source directory',commit:'Source commit',hash:'Snapshot SHA-256',count:'Artifact count',note:'Sanitization note',boundary:'Read-only static presentation. No Jetson/NUC connection, CLI, backend, live execution, or device status.',back:'Back to official demo page',select:'Select an artifact to inspect its unmodified snapshot fields.'},
+  zh:{declaration:'Atlas v0.1.0 冻结基线 · 已脱敏静态演示 · 非实时数据',title:'Case 1 LiDAR 产物',subtitle:'14 个已提交并验证的冻结产物——并非 run_demo.sh 的 18 文件重新运行结果',artifacts:'冻结产物',source:'来源与完整性',sanitization:'脱敏说明',sourceLabel:'来源目录',commit:'来源提交',hash:'快照 SHA-256',count:'产物数量',note:'脱敏说明',boundary:'只读静态展示。不连接 Jetson/NUC，不运行 CLI，不调用后端，不执行实时任务，也不显示设备状态。',back:'返回官网演示页',select:'选择产物以查看快照中的原始字段。'}
+}[locale];
+document.documentElement.lang=locale;
+document.title=`Atlas 天枢 · ${copy.title}`;
+$('#declaration').textContent=copy.declaration;
+$('#page-title').textContent=copy.title;
+$('#page-subtitle').textContent=copy.subtitle;
+$('#artifact-heading').textContent=copy.artifacts;
+$('#source-heading').textContent=copy.source;
+$('#sanitization-heading').textContent=copy.sanitization;
+$('#scope-copy').textContent=copy.boundary;
+$('#back-link').textContent=copy.back;
+document.querySelectorAll('.language-switcher a').forEach(link=>link.classList.toggle('active',link.dataset.locale===locale));
+
+const metadata=[
+  [copy.sourceLabel,manifest.source_directory],
+  [copy.commit,manifest.source_commit],
+  [copy.hash,manifest.ui_snapshot.sha256],
+  [copy.count,manifest.artifact_count]
+];
+$('#manifest-metadata').innerHTML=metadata.map(([label,value])=>`<div><dt>${esc(label)}</dt><dd>${esc(value)}</dd></div>`).join('');
+$('#sanitization-copy').innerHTML=`<p>${esc(manifest.sanitization.immutable_identifier_note)}</p><div class="tokens">${manifest.sanitization.fields.map(field=>`<span>${esc(field)}</span>`).join('')}</div>`;
+
+let selected=0;
+function artifactId(entry){return entry.artifact.artifact_id||entry.artifact.ref_id||entry.artifact.ir_id||entry.artifact.ll_id}
+function render(){
+  $('#artifact-list').innerHTML=snapshot.artifacts.map((entry,index)=>`<button class="artifact-item ${index===selected?'active':''}" data-index="${index}"><b>${String(index+1).padStart(2,'0')} · ${esc(artifactId(entry))}</b><span>${esc(entry.artifact.artifact_type||entry.artifact.ref_class||'governed_artifact')}</span><small>${esc(entry.source_file)}</small></button>`).join('');
+  const entry=snapshot.artifacts[selected];
+  $('#artifact-detail').innerHTML=`<div class="card-head"><div><p class="eyebrow">${esc(entry.artifact.artifact_type||entry.artifact.ref_class||'FROZEN ARTIFACT')}</p><h2>${esc(artifactId(entry))}</h2></div><span>SHA-256 VERIFIED SOURCE</span></div><p class="source-path">${esc(entry.source_file)}</p><pre>${esc(JSON.stringify(entry.artifact,null,2))}</pre>`;
+  document.querySelectorAll('[data-index]').forEach(button=>button.onclick=()=>{selected=Number(button.dataset.index);render()});
+}
+$('#artifact-help').textContent=copy.select;
 render();
