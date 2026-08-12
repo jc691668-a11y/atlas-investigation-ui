@@ -64,3 +64,9 @@ Tests cover conservative parsing/missing fields, deterministic Copilot guardrail
 - Do not configure commands from browser input and do not use shell fragments in `ATLAS_BASELINE_ARGS`.
 - The UI is read-only evidence presentation. PASS means only that the configured public baseline process exited successfully.
 - Never load unsanitized private artifacts into a shared deployment.
+
+## V2 artifact schema status
+
+The V2 architecture preview separates demo records into `dataset`, `ep`, `ref`, `rga`, `context`, `tier`, `egp`, `sensor_ir`, `sensor_ll`, `oem_response`, `closure`, and `assist_candidate` artifacts. Repository inspection found no authoritative public schemas for those artifacts, including no verified official nine-field EGP contract. Consequently, every value in those modules is labeled illustrative/demo-only and must not be treated as a schema assertion. The EGP module explicitly displays **EGP field contract pending schema verification** rather than fabricating an official contract.
+
+The only fields verified against existing repository code are the V1 artifact adapter fields documented above: `observed_topics`, topic eligibility/classification, `timing_relationships`, governance/evidence windows, and `classification_state`. These V1 adapter fields are not represented as official schemas for the V2 product artifacts.
