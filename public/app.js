@@ -1,56 +1,29 @@
-const demoArtifact = Object.freeze({
-  demo_notice: "UI DEMO DATA — NOT A REAL BASELINE RESULT",
-  observed_topics: ["/demo/camera", "/demo/imu", "/demo/odometry"],
-  topic_eligibility: {
-    "/demo/camera": "illustrative eligible",
-    "/demo/imu": "illustrative eligible",
-    "/demo/odometry": "illustrative review"
-  },
-  timing_relationships: [
-    { source: "/demo/camera", target: "/demo/imu", relationship: "illustrative alignment", offset_ms: 12 },
-    { source: "/demo/imu", target: "/demo/odometry", relationship: "illustrative sequence", offset_ms: 4 }
-  ],
-  governance_evidence_windows: [{ label: "demo-window-01", start: "T+00:00", end: "T+00:30", status: "illustrative" }],
-  classification_state: "DEMO — NOT EVALUATED"
-});
-
-const parsedDemo = {
-  observedTopics: demoArtifact.observed_topics,
-  topicClassification: demoArtifact.topic_eligibility,
-  timingRelationships: demoArtifact.timing_relationships,
-  evidenceWindows: demoArtifact.governance_evidence_windows,
-  classificationState: demoArtifact.classification_state,
-  raw: demoArtifact
-};
-
-const fields = [
-  ["Observed topics", "observedTopics"],
-  ["Topic eligibility / classification", "topicClassification"],
-  ["Timing relationships", "timingRelationships"],
-  ["Governance / evidence windows", "evidenceWindows"],
-  ["Classification state", "classificationState"]
+const cases = [
+  { id:"WINPOL-DEFAULT-001", title:"Intermittent steering assist alert", subtitle:"Shared review of synchronized vehicle and steering sensor observations", asset:"WINPOL EV-23", opened:"12 Aug 2026", partner:"Northstar Motion", status:"Evidence review", visibility:"OEM + Partner", accent:"amber", summary:"A sanitized demonstration of a steering-assist alert observed during a low-speed validation route. Evidence remains descriptive and does not establish causality.", signals:["Steering status","Vehicle speed","Power state"], events:[
+    ["09:41:08.120","OEM","Vehicle session started","Session boundary recorded","neutral"],
+    ["09:41:12.450","OEM","Speed entered low-speed window","18.4 km/h · sanitized sample","blue"],
+    ["09:41:12.612","Partner","Steering status transition","Status flag changed to REVIEW","purple"],
+    ["09:41:12.684","Atlas","Evidence window correlated","72 ms separation · timing only","amber"],
+    ["09:41:13.104","OEM","Driver alert observed","Cluster alert recorded by demo logger","red"],
+    ["09:41:18.900","Partner","Steering status normalized","No causal interpretation attached","green"]]},
+  { id:"THERM-COOL-014", title:"Thermal loop variance", subtitle:"Cross-party review of a sanitized cooling telemetry window", asset:"ATLAS-X7", opened:"10 Aug 2026", partner:"Kelvin Controls", status:"Partner input", visibility:"OEM + Partner", accent:"purple", summary:"Illustrative temperature and pump observations are aligned for partner review. The records do not diagnose a component or assign responsibility.", signals:["Coolant temperature","Pump command","Ambient"], events:[["14:03:01.020","OEM","Validation run opened","Sanitized thermal session","neutral"],["14:03:07.330","Partner","Pump command sampled","Command value shared","purple"],["14:03:08.005","Atlas","Variance window marked","Timing association only","amber"],["14:03:12.410","OEM","Temperature sample recorded","Demo value redacted","blue"]]},
+  { id:"VISION-SYNC-008", title:"Camera timing discontinuity", subtitle:"Shared timestamp review for a fictional perception recording", asset:"MULE-C12", opened:"07 Aug 2026", partner:"Lumen Optics", status:"Decision pending", visibility:"Shared evidence", accent:"blue", summary:"A demonstration camera timestamp gap is presented alongside vehicle-clock observations. It is not proof of fault or root cause.", signals:["Frame timestamp","Vehicle clock","Capture state"], events:[["16:22:44.000","OEM","Capture initialized","Demo session marker","neutral"],["16:22:45.120","Partner","Frame timestamp received","Sanitized frame metadata","purple"],["16:22:45.164","Atlas","Discontinuity marked","44 ms interval · observation only","amber"],["16:22:46.201","OEM","Capture continued","Sequence restored in demo data","green"]]}
 ];
 
-const answers = {
-  summarize: "The demo presents 3 illustrative topics, 3 illustrative classifications, and 2 illustrative timing relationships. This is a UI walkthrough, not a completed validation.",
-  evidence: "The displayed demo window and topic labels exist only to demonstrate evidence presentation. They are not produced by Atlas and must not be used for an investigation decision.",
-  timing: "Two illustrative timing rows demonstrate the intended layout. No real timestamps were analyzed and no causal interpretation is available.",
-  missing: "A real Atlas artifact, CLI execution log, exit code, verified evidence windows, and baseline classification are all intentionally absent from this preview.",
-  next: "Connect the reviewed Local Atlas Runner in an approved environment, execute the documented public SDK baseline, then replace demo values with the resulting sanitized artifact."
-};
+let selected = cases[0], tab = "timeline", view = "oem";
+const $ = (selector) => document.querySelector(selector);
+const escapeHtml = (s) => String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"})[c]);
 
-const escapeHtml = (value) => String(value).replace(/[&<>]/g, (character) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" })[character]);
-const fieldsElement = document.querySelector("#fields");
-fieldsElement.innerHTML = fields.map(([title, key]) => `<section class="field"><h3>${title}<span>DEMO</span></h3><pre>${escapeHtml(JSON.stringify(parsedDemo[key], null, 2))}</pre></section>`).join("");
-document.querySelector("#raw pre").textContent = JSON.stringify(parsedDemo.raw, null, 2);
-
-document.querySelectorAll("[data-action]").forEach((button) => {
-  button.addEventListener("click", () => {
-    const answer = answers[button.dataset.action];
-    const bubble = document.createElement("div");
-    bubble.className = "bubble";
-    bubble.textContent = `DRAFT / AI-assisted — UI DEMO DATA ONLY. ${answer} This response does not confirm root cause.`;
-    document.querySelector("#chat").append(bubble);
-    bubble.scrollIntoView({ behavior: "smooth", block: "nearest" });
-  });
-});
+function renderCases(query="") { const filtered=cases.filter(c=>(c.id+c.title+c.partner).toLowerCase().includes(query.toLowerCase())); $("#case-list").innerHTML=filtered.map(c=>`<button class="case-card ${c.id===selected.id?"active":""}" data-case="${c.id}"><span class="case-top"><b>${c.id}</b><i class="dot ${c.accent}"></i></span><strong>${c.title}</strong><small>${c.partner}</small><span class="case-bottom"><em>${c.status}</em><time>${c.opened.replace(" 2026","")}</time></span></button>`).join(""); document.querySelectorAll("[data-case]").forEach(b=>b.onclick=()=>{selected=cases.find(c=>c.id===b.dataset.case);tab="timeline";render();resetChat();}); }
+function timeline(){return `<div class="section-head"><div><p class="eyebrow">SHARED EVIDENCE SEQUENCE</p><h2>Evidence Timeline</h2><p>Time-aligned observations available in <b>${view==="oem"?"OEM View":view==="partner"?"Sensor Partner View":"Shared Evidence View"}</b>.</p></div><div class="legend"><span><i class="dot blue"></i>OEM</span><span><i class="dot purple"></i>Partner</span><span><i class="dot amber"></i>Atlas</span></div></div><div class="window"><span>EVIDENCE WINDOW</span><b>${selected.id === "WINPOL-DEFAULT-001" ? "09:41:08–09:41:19 UTC" : "Sanitized demo interval"}</b><em>Read only</em></div><div class="timeline">${selected.events.map((e,i)=>`<div class="event"><time>${e[0]}<small>UTC</small></time><div class="rail"><i class="event-dot ${e[4]}"></i>${i<selected.events.length-1?"<span></span>":""}</div><div class="event-card"><span class="source ${e[1].toLowerCase()}">${e[1]}</span><strong>${e[2]}</strong><p>${e[3]}</p><button aria-label="Inspect evidence">•••</button></div></div>`).join("")}</div><div class="claim-note"><b>Claim Boundary</b><p>Temporal proximity is displayed for investigation coordination only. It does not demonstrate causality, fault, or root cause.</p></div>`}
+function renderTab(){ const common={overview:`<div class="section-head"><div><p class="eyebrow">CASE BRIEF</p><h2>Overview</h2></div></div><div class="overview-grid"><article><h3>Investigation summary</h3><p>${selected.summary}</p></article><article><h3>Shared signals</h3><ul>${selected.signals.map(x=>`<li>${x}<span>Sanitized</span></li>`).join("")}</ul></article><article><h3>Participation</h3><p>OEM evidence owner<br><b>${selected.partner}</b> · sensor partner<br>Atlas · coordination layer</p></article><article><h3>Current posture</h3><p><b>${selected.status}</b><br>Human decision remains required.</p></article></div>`,timeline:timeline(),chain:`<div class="section-head"><div><p class="eyebrow">PROVENANCE</p><h2>Investigation Chain</h2><p>Reviewable handoffs; no inference of responsibility.</p></div></div><div class="chain"><div><b>1</b><strong>OEM observation</strong><span>Sanitized evidence submitted</span></div><i>→</i><div><b>2</b><strong>Atlas alignment</strong><span>Evidence window organized</span></div><i>→</i><div><b>3</b><strong>Partner review</strong><span>Commentary requested</span></div></div>`,rga:`<div class="section-head"><div><p class="eyebrow">RGA RECALL</p><h2>Related Guidance & Actions</h2></div></div><div class="empty-state">⌁<h3>No approved recall linked</h3><p>Demo suggestions are not recall determinations. A human reviewer must link approved guidance.</p><button class="outline">Review demo references</button></div>`,exchange:`<div class="section-head"><div><p class="eyebrow">CONTROLLED COLLABORATION</p><h2>Partner Exchange</h2></div></div><div class="exchange"><div><span>OEM · 09:48 UTC</span><p>Shared the sanitized evidence interval for timestamp review.</p></div><div><span>${selected.partner} · 10:16 UTC</span><p>Acknowledged receipt. Partner interpretation remains pending.</p></div><div><span>Atlas · system</span><p>Exchange logged in this demo workspace. No external write was performed.</p></div></div>`,decisions:`<div class="section-head"><div><p class="eyebrow">HUMAN AUTHORITY</p><h2>Decisions</h2></div></div><div class="decision"><span>PENDING HUMAN REVIEW</span><h3>No investigation conclusion recorded</h3><p>Atlas does not determine root cause, assign liability, or automatically close this case.</p><button disabled>Close case</button><small>Disabled by workspace safeguard</small></div>`,raw:`<div class="section-head"><div><p class="eyebrow">SANITIZED RECORD</p><h2>Raw Details</h2><p>Demonstration JSON, not a real baseline result.</p></div></div><pre class="raw">${escapeHtml(JSON.stringify({demo_data:true,claim_boundary:"evidence coordination only",...selected},null,2))}</pre>`}; $("#tab-content").innerHTML=common[tab]; }
+function render(){renderCases($("#case-search").value); $("#crumb-id").textContent=selected.id;$("#case-title").textContent=selected.title;$("#case-subtitle").textContent=selected.subtitle;$("#case-status").textContent=selected.status;$("#meta-id").textContent=selected.id;$("#meta-asset").textContent=selected.asset;$("#meta-opened").textContent=selected.opened;$("#meta-partner").textContent=selected.partner;$("#meta-visibility").textContent=selected.visibility;document.querySelectorAll("[data-tab]").forEach(b=>b.classList.toggle("active",b.dataset.tab===tab));renderTab();}
+const prompts=["Summarize shared evidence","What changed in the timeline?","Draft a partner follow-up"];
+function response(q){const l=q.toLowerCase();if(l.includes("changed")||l.includes("timeline"))return `${selected.events.length} ordered demo observations are displayed. Atlas marks timing relationships only; proximity does not establish causality.`;if(l.includes("partner")||l.includes("follow"))return `Draft for ${selected.partner}: Please review the sanitized evidence window for ${selected.id} and describe any supported observations, limitations, and missing context. Do not infer root cause.`;return `${selected.id} contains sanitized OEM, partner, and Atlas coordination entries. The current posture is “${selected.status}.” Evidence is descriptive, and a human investigation decision is still required.`;}
+function addMessage(text,who="assistant"){const el=document.createElement("div");el.className=`message ${who}`;el.innerHTML=who==="assistant"?`<span>✦ Atlas Copilot</span><p><b>DRAFT / AI-assisted.</b> ${escapeHtml(text)} This response does not confirm root cause.</p>`:`<p>${escapeHtml(text)}</p>`;$("#chat").append(el);$("#chat").scrollTop=$("#chat").scrollHeight;}
+function ask(q){addMessage(q,"user");addMessage(response(q));}
+function resetChat(){$("#chat").innerHTML="";addMessage(`Case ${selected.id} is ready. I can summarize the sanitized evidence, explain the timeline, or draft a partner follow-up.`);$("#suggestions").innerHTML=prompts.map(p=>`<button>${p}</button>`).join("");document.querySelectorAll("#suggestions button").forEach(b=>b.onclick=()=>ask(b.textContent));}
+document.querySelectorAll("[data-view]").forEach(b=>b.onclick=()=>{view=b.dataset.view;document.querySelectorAll("[data-view]").forEach(x=>x.classList.toggle("active",x===b));renderTab();});
+document.querySelectorAll("[data-tab]").forEach(b=>b.onclick=()=>{tab=b.dataset.tab;render();});
+$("#case-search").oninput=e=>renderCases(e.target.value);$("#chat-form").onsubmit=e=>{e.preventDefault();const q=$("#chat-input").value.trim();if(q){ask(q);$("#chat-input").value="";}};
+render();resetChat();

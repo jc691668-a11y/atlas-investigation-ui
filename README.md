@@ -1,6 +1,6 @@
-# Atlas Investigation UI MVP
+# Atlas Shared Investigation Workspace V2
 
-Private, standalone, read-only web UI around the **public Atlas DSIL SDK surface**. This repository does not contain, modify, or reimplement the Atlas Investigation Engine. It does not write to Assist Vault or Closure.
+Private, standalone, read-only workspace around the **public Atlas DSIL SDK surface**. V2 incrementally upgrades the original preview with OEM, Sensor Partner, and Shared Evidence views; a professional three-column investigation layout; and three explicitly sanitized demo cases. This repository does not contain, modify, or reimplement the Atlas Investigation Engine. It does not write to Assist Vault or Closure.
 
 ## Current SDK verification status
 
@@ -19,7 +19,7 @@ npm start
 
 ## Vercel UI preview
 
-The default static page is an appearance-and-interaction preview. It continuously labels itself **Preview Mode / Demo Data** and **UI DEMO DATA — NOT A REAL BASELINE RESULT**. It never reports a Canary PASS, and the runner button is disabled with **Local Atlas Runner not connected**. The illustrative values exist only to make all three workspace panels reviewable.
+The default static page is an appearance-and-interaction preview. It continuously labels itself **Demo Data**, identifies records as sanitized and fictional, and preserves the Claim Boundary. The three cases and their evidence sequences are illustrative, not real baseline results. The UI never determines root cause, closes a case automatically, or writes to Assist Vault.
 
 Import this repository into Vercel or run `vercel`. `vercel.json` executes `npm run build` and publishes `dist/`; the deployed page has no localhost or server API dependency. The existing Node API and controlled runner remain in `src/` for a future separately secured Local Live integration, but the Vercel preview does not connect to them.
 
