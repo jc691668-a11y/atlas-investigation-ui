@@ -1,0 +1,208 @@
+{
+  "snapshot_metadata": {
+    "snapshot_id": "ATLAS-DEMO-SNAPSHOT-LIDAR-CANARY-001",
+    "case_id": "DEMO-CASE-LIDAR-CANARY-001",
+    "classification": "SANITIZED_DEMO_DATA",
+    "reference_input": "atlas-dsil-sdk/demos/lidar_canary/run_demo.sh",
+    "generated_from": "Atlas baseline reference input",
+    "static_only": true,
+    "identity": {
+      "customer": "Demo OEM — Northstar Robotics (sanitized)",
+      "robot": "DEMO-AMR-ALDER-07",
+      "people": "Demo roles only; no person identities",
+      "sensor_partner": "Demo Sensor Partner — Lumen FAE"
+    }
+  },
+  "lifecycle": [
+    "runtime_dataset",
+    "evidence_pack",
+    "ref_ticket",
+    "historical_rga_match",
+    "investigation_context",
+    "investigation_tier_candidate",
+    "sensor_engagement_pack",
+    "sensor_ir_and_ll_plus_oem_response",
+    "oem_closure",
+    "assist_candidate_vault"
+  ],
+  "governance": {
+    "root_cause_inferred": false,
+    "automatic_responsibility_assignment": false,
+    "automatic_closure": false,
+    "automatic_assist_vault_write": false,
+    "ir_requires_human_authorization": true,
+    "ll_requires_human_authorization": true
+  },
+  "artifacts": {
+    "runtime_dataset": {
+      "artifact_id": "RDS-LIDAR-2026-001",
+      "name": "Runtime Dataset™",
+      "owner": "OEM",
+      "status": "Locked demo snapshot",
+      "runtime_surface": "Runtime Surface™ / robot edge",
+      "sources": [
+        "ROS Topic",
+        "Linux Runtime",
+        "Ethernet",
+        "Power",
+        "Timing"
+      ],
+      "lock": "dataset_lock=true · illustrative",
+      "window": "T0 − 300s → T0 + 300s",
+      "integrity": "Demo digest present · not production-verified",
+      "case_id": "DEMO-CASE-LIDAR-CANARY-001",
+      "agent_observation": {
+        "observation_id": "OBS-LIDAR-CANARY-001",
+        "classification_state": "observation_only",
+        "observed_topics": [
+          "/demo/lidar/points",
+          "/demo/diagnostics"
+        ],
+        "timing_relationships": "T0-aligned reference window; values sanitized",
+        "runtime_observation": "Ethernet carrier transition near T0 (sanitized)"
+      }
+    },
+    "evidence_pack": {
+      "artifact_id": "EP-LIDAR-2026-001",
+      "name": "Evidence Pack™",
+      "owner": "Atlas Agent™",
+      "status": "Available · demo",
+      "window_policy": "WINPOL-DEFAULT-001",
+      "canonical_event_t0": "2026-08-12T09:41:13.104Z",
+      "windows": [
+        "Pre-event · T0 − 300s",
+        "Near-event · T0 − 30s",
+        "Canonical event T0",
+        "Post-event · T0 + 300s"
+      ],
+      "alignment": [
+        "ROS Topic",
+        "Linux Runtime",
+        "Ethernet",
+        "Power",
+        "Timing"
+      ],
+      "provenance": "Source pointers retained · sanitized",
+      "integrity": "Demo manifest · not production-verified",
+      "dataset_lock": "Locked reference to runtime dataset",
+      "case_id": "DEMO-CASE-LIDAR-CANARY-001"
+    },
+    "ref_ticket": {
+      "artifact_id": "REF-LIDAR-2026-001",
+      "name": "REF Investigation",
+      "owner": "OEM investigation lead",
+      "status": "Admitted for human review",
+      "runtime_observation": "Ethernet carrier interruption near T0",
+      "case_id": "DEMO-CASE-LIDAR-CANARY-001"
+    },
+    "historical_rga_match": {
+      "artifact_id": "RGA-LIDAR-2026-001",
+      "name": "Historical RGA™",
+      "owner": "Atlas Agent™",
+      "status": "Candidate recall complete",
+      "recall_result": "Strong Candidate",
+      "candidate_classes": [
+        "Strong Candidate",
+        "Partial Candidate",
+        "Related Pattern",
+        "No Match"
+      ],
+      "notice": "Historical similarity does not establish root cause.",
+      "root_cause_inferred": false,
+      "case_id": "DEMO-CASE-LIDAR-CANARY-001"
+    },
+    "investigation_context": {
+      "artifact_id": "CTX-LIDAR-2026-001",
+      "name": "Investigation Context™",
+      "owner": "OEM",
+      "status": "Boundary reviewed",
+      "robot_runtime": "AMR Alder-07 · Aisle transit",
+      "sensor_profile": "LiDAR L-series / runtime profile sanitized",
+      "constraints": [
+        "No production identifiers",
+        "Clock precision sanitized"
+      ],
+      "case_id": "DEMO-CASE-LIDAR-CANARY-001"
+    },
+    "investigation_tier_candidate": {
+      "artifact_id": "TIER-LIDAR-2026-001",
+      "name": "Investigation Tier Candidate™",
+      "owner": "Atlas triage + human reviewer",
+      "status": "Candidate · not confirmed",
+      "tier_candidate": "Tier 2 Candidate",
+      "boundary": "Routing scope only; no responsibility inference",
+      "case_id": "DEMO-CASE-LIDAR-CANARY-001"
+    },
+    "sensor_engagement_pack": {
+      "artifact_id": "EGP-LIDAR-2026-001",
+      "name": "Sensor Engagement Pack™",
+      "owner": "OEM ↔ Sensor FAE",
+      "status": "Shared · awaiting human response",
+      "definition": "Boundary-controlled investigation collaboration pack between OEM and Sensor FAE",
+      "oem_shared_evidence_boundary": [
+        "Event window",
+        "Selected runtime signals",
+        "Sanitized operating state"
+      ],
+      "sensor_model_runtime_profile": "LiDAR L-series · demo firmware / Linux runtime",
+      "evidence_pack_reference": "EP-LIDAR-2026-001",
+      "investigation_context": "CTX-LIDAR-2026-001",
+      "tier_candidate": "Tier 2 Candidate",
+      "questions_for_sensor_fae": [
+        "Can link-state transitions be reproduced?",
+        "What limitations affect interpretation?"
+      ],
+      "sensor_ir": "Draft · not authorized",
+      "sensor_ll": "Pending",
+      "oem_response": "Pending human review",
+      "case_id": "DEMO-CASE-LIDAR-CANARY-001"
+    },
+    "sensor_ir": {
+      "artifact_id": "IR-LIDAR-2026-001",
+      "name": "Investigation Result",
+      "owner": "Sensor FAE",
+      "status": "Draft · unconfirmed",
+      "finding": "Observation review in progress",
+      "authorized": false,
+      "case_id": "DEMO-CASE-LIDAR-CANARY-001"
+    },
+    "sensor_ll": {
+      "artifact_id": "LL-LIDAR-2026-001",
+      "name": "Lessons Learned",
+      "owner": "Sensor FAE",
+      "status": "Pending",
+      "lesson": "No authorized lesson recorded",
+      "authorized": false,
+      "case_id": "DEMO-CASE-LIDAR-CANARY-001"
+    },
+    "oem_response": {
+      "artifact_id": "OEMR-LIDAR-2026-001",
+      "owner": "OEM",
+      "status": "Pending human response",
+      "decision": "No disposition recorded",
+      "case_id": "DEMO-CASE-LIDAR-CANARY-001"
+    },
+    "sensor_oem_closure_status": {
+      "artifact_id": "CLOSE-LIDAR-2026-001",
+      "owner": "OEM",
+      "status": "Blocked · human approval required",
+      "automatic": false,
+      "root_cause_inferred": false,
+      "case_id": "DEMO-CASE-LIDAR-CANARY-001",
+      "sensor_status": "Awaiting authorized IR and LL",
+      "oem_status": "Open — no automatic Closure"
+    },
+    "assist_candidate": {
+      "artifact_id": "AC-LIDAR-2026-001",
+      "name": "Assist Candidate",
+      "owner": "Governance reviewer",
+      "status": "Candidate only · not in Vault",
+      "approval_status": "Not approved",
+      "linked_evidence_pack": "EP-LIDAR-2026-001",
+      "linked_investigation_context": "CTX-LIDAR-2026-001",
+      "historical_recall_eligibility": "Ineligible until authorized IR and LL",
+      "vault_write_status": "Not written",
+      "case_id": "DEMO-CASE-LIDAR-CANARY-001"
+    }
+  }
+}
