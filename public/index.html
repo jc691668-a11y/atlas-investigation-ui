@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Atlas Investigation UI visual preview using explicitly labeled demo data">
+  <title>Atlas · Investigation Preview</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header>
+    <div class="brand"><span class="mark">A</span><div><b>Atlas</b><small>INVESTIGATION WORKSPACE</small></div></div>
+    <div class="preview-banner"><span class="pulse"></span><strong>Preview Mode</strong><span>/</span><span>Demo Data</span></div>
+  </header>
+  <div class="demo-warning">UI DEMO DATA — NOT A REAL BASELINE RESULT</div>
+  <main>
+    <aside class="canary-panel">
+      <p class="eyebrow">CANARY VALIDATION</p><h2>Reference baseline</h2>
+      <div class="case active"><span class="case-icon">◇</span><div><b>ROS 2 runtime observation</b><small>UI preview · illustrative case</small></div><span>›</span></div>
+      <div class="notice"><strong>Local Atlas Runner not connected</strong><br>This preview cannot execute Atlas or validate a baseline.</div>
+      <button class="primary" id="run" disabled>▶ Run Canary Baseline</button>
+      <p class="button-help">Available only when a reviewed Local Runner is connected.</p>
+      <section class="run">
+        <div><span>Status</span><strong class="demo-status">DEMO ONLY</strong></div><div><span>Duration</span><b>Not run</b></div><div><span>Exit code</span><b>Not available</b></div>
+        <h3>PREVIEW ACTIVITY</h3><pre>Preview initialized with illustrative UI data.
+No Atlas CLI process was started.
+No baseline result was produced.</pre>
+      </section>
+    </aside>
+    <article>
+      <div class="article-head"><div><p class="eyebrow">EVIDENCE WORKSPACE</p><h1>Runtime observation</h1></div><span class="badge">DEMO · READ ONLY</span></div>
+      <p class="sub">Illustrative content for visual review only. Values below are not Atlas evidence.</p>
+      <div id="fields"></div>
+      <details id="raw"><summary>Demo JSON <span>view illustrative data</span></summary><pre></pre></details>
+    </article>
+    <aside class="copilot">
+      <p class="eyebrow">ATLAS COPILOT</p><h2>Evidence assistant</h2>
+      <div class="draft">✦ DRAFT · AI-ASSISTED</div><p class="guard">Deterministic preview responses over demo data. Never a root-cause determination.</p>
+      <div id="chat" aria-live="polite"><div class="bubble system-bubble"><strong>Preview ready</strong><br>Select a prompt to preview the offline Copilot interaction. Responses use demo data only.</div></div>
+      <div class="prompts"><button data-action="summarize">Summarize validation</button><button data-action="evidence">Explain evidence</button><button data-action="timing">Explain timing relationships</button><button data-action="missing">What is missing?</button><button data-action="next">Recommend next validation step</button></div>
+    </aside>
+  </main>
+  <script type="module" src="/app.js"></script>
+</body>
+</html>
